@@ -154,6 +154,9 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                     hint: '选择合约',
                                     searchAlignVertical:
                                         TextAlignVertical.bottom,
+                                    searchStyle: const TextStyle(
+                                      fontSize: 14
+                                    ),
                                     initialValue: _suggestions[2],
                                     searchInputDecoration: InputDecoration(
                                       focusedBorder: OutlineInputBorder(
@@ -288,7 +291,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             ),
                           ),
                           SizedBox(
-                            width: screenUtil.adaptive(10),
+                            width: screenUtil.adaptive(20),
                           ),
                           Expanded(
                             child: Column(
@@ -309,7 +312,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   child: Obx(
                                     () => OverlayField<int>(
                                       key: const Key('Side'),
-                                      maxHeight: 40,
+                                      maxHeight: 60,
                                       initValue: '${state.side.value}',
                                       lists: state.sides,
                                       textStyle: const TextStyle(fontSize: 14),
@@ -321,7 +324,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                           height: 20,
                                           alignment: Alignment.centerLeft,
                                           margin:
-                                              const EdgeInsets.only(left: 4),
+                                              const EdgeInsets.all(4),
                                           child: Text('$e'),
                                         );
                                       },
@@ -383,8 +386,8 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
+                          SizedBox(
+                            width: screenUtil.adaptive(20),
                           ),
                           Expanded(
                             child: Column(
@@ -403,7 +406,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   height: screenUtil.adaptive(30),
                                   alignment: Alignment.centerLeft,
                                   child: Obx(
-                                        () => OverlayField<int>(
+                                    () => OverlayField<int>(
                                       key: const Key('HedgeFlag'),
                                       maxHeight: 100,
                                       initValue: '${state.hedgeFlag.value}',
@@ -417,7 +420,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                           height: 20,
                                           alignment: Alignment.centerLeft,
                                           margin:
-                                          const EdgeInsets.only(left: 4),
+                                              const EdgeInsets.only(left: 4),
                                           child: Text('$e'),
                                         );
                                       },
@@ -478,8 +481,8 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
+                          SizedBox(
+                            width: screenUtil.adaptive(20),
                           ),
                           Expanded(
                             child: Column(
@@ -525,22 +528,25 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                         ],
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
                         logic.onSubmit();
                       },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          bottom: screenUtil.adaptive(20),
-                          top: screenUtil.adaptive(20),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Setting.orderSubmitColor),
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(right: 100, left: 100),
                         ),
-                        decoration: BoxDecoration(color: Setting.orderSubmitColor),
-                        padding: EdgeInsets.only(
-                            top: screenUtil.adaptive(5),
-                            bottom: screenUtil.adaptive(5),
-                            right: screenUtil.adaptive(100),
-                            left: screenUtil.adaptive(100)),
-                        child: const Text('下单'),
+                      ),
+                      child: const Text(
+                        '下单',
+                        style: TextStyle(
+                          color: Color(0xff333333),
+                        ),
                       ),
                     ),
                   ],

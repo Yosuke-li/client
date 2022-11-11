@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/utils/navigator.dart';
 import 'package:transaction_client/utils/screen.dart';
 
 class BottomWidgetPage extends StatefulWidget {
-
   const BottomWidgetPage({Key? key}) : super(key: key);
 
   @override
@@ -55,19 +55,50 @@ class _BottomWidgetState extends State<BottomWidgetPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RepaintBoundary(
+          /// 流实现?
+          Expanded(child: Container(
+            margin: const EdgeInsets.only(right: 30, left: 30),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const Text('风控记录'),
+                  ),
+                ),
+                SizedBox(
+                  height: 22,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all(Setting.backGroundColor),
+                    ),
+                    child: const Text(
+                      '更多记录',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff333333),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),),
+          SizedBox(
+            height: 35,
+            width: 1,
             child: Container(
-              margin: EdgeInsets.only(right: screenUtil.adaptive(20)),
-              child: Text(
-                  '${now.year}-${now.month}-${now.day} ${pad0(now.hour)}:${pad0(now.minute)}:${pad0(now.second)}'),
+              color: Setting.backGroundColor,
             ),
           ),
-          InkWell(
-            onTap: () {
-              NavigatorUtils.pop(context);
-            },
+          RepaintBoundary(
             child: Container(
-              child: Text('行情服务器登录成功'),
+              margin: const EdgeInsets.only(left: 20,),
+              width: 150,
+              child: Text(
+                  '${now.year}-${now.month}-${now.day} ${pad0(now.hour)}:${pad0(now.minute)}:${pad0(now.second)}'),
             ),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transaction_client/global/setting.dart';
 
 class AddGroupsPage extends StatefulWidget {
   const AddGroupsPage({Key? key}) : super(key: key);
@@ -43,20 +44,34 @@ class _AddGroupsPageState extends State<AddGroupsPage> {
               children: [
                 ElevatedButton(
                   onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Setting.onSubmitColor),
+                  ),
                   child: Container(
                     height: 31,
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20, left: 20),
-                    child: const Text('确定'),
+                    child: const Text(
+                      '确定',
+                      style: TextStyle(color: Color(0xff333333)),
+                    ),
                   ),
                 ),
                 ElevatedButton(
                   onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Setting.onCancelColor),
+                  ),
                   child: Container(
                     height: 31,
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(right: 20, left: 20),
-                    child: const Text('取消'),
+                    child: const Text(
+                      '取消',
+                      style: TextStyle(color: Color(0xff333333)),
+                    ),
                   ),
                 ),
               ],

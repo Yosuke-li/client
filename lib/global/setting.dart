@@ -28,6 +28,9 @@ class Setting {
   static Color bottomBorderColor = Colors.blue.shade100;
   static Color onSelectColor = Colors.blue.shade50;
 
+  static Color onSubmitColor = const Color(0xff8FB6EF);
+  static Color onCancelColor = const Color(0xffD2E0F4);
+
   /// table的特殊颜色
   static Color tableBlue = const Color(0xff027DB4);
   static Color tableRed = const Color(0xffD9001B);

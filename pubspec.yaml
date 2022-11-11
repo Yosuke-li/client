@@ -30,6 +30,7 @@ dependencies:
   tray_manager: ^0.1.7 #系统托盘
   flutter_swiper_plus: ^2.0.4
   docking: ^1.4.1+1
+  multi_split_view: ^2.1.0
 
 dev_dependencies:
   flutter_test:

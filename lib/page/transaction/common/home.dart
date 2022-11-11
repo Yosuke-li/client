@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_split_view/multi_split_view.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';
 import 'package:transaction_client/page/transaction/common/bottom_widget.dart';
@@ -17,13 +18,49 @@ class HomeIndexPage extends StatefulWidget {
 }
 
 class _HomeIndexPageState extends State<HomeIndexPage> {
+  late MultiSplitView multiSplitView;
+  MultiSplitViewTheme? theme;
+  late MultiSplitViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _controller = MultiSplitViewController(areas: [
+        Area(minimalWeight: .05, weight: .35),
+        Area(minimalWeight: .3),
+      ]);
+      multiSplitView = MultiSplitView(
+        axis: Axis.vertical,
+        controller: _controller,
+        children: [const QuotationPage(), _buildContainer()],
+        onWeightChange: () {
+
+        },
+      );
+
+      theme = MultiSplitViewTheme(
+        data: MultiSplitViewThemeData(
+            dividerPainter: DividerPainters.grooved1(
+                color: Colors.indigo[100]!,
+                highlightedColor: Colors.indigo[900]!)),
+        child: multiSplitView,
+      );
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      child: theme ?? Container(),
+    );
+  }
+
+  Widget _buildContainer() {
+    return Container(
       child: Column(
         children: [
-          const QuotationPage(),
           const HeadWidgetPage(),
           Expanded(
             child: Container(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:transaction_client/global/setting.dart';
+import 'package:transaction_client/page/instructions/main/instruct_main.dart';
 import 'package:transaction_client/page/transaction/common/home.dart';
 import 'package:transaction_client/widget/management/common/view_key.dart';
 import 'package:transaction_client/widget/management/widget/custom_expansion_tile.dart';
@@ -32,10 +33,20 @@ class _ToolState extends State<Tool> {
 
   void _handleHedgeInfoTap() {
     widget.controller.open(
-      key: ConstViewKey.hedgeInfo,
+      key: ConstViewKey.transactionInfo,
       tab: '交易',
       contentIfAbsent: (_) => const HomeIndexPage(),
     );
+    setState(() {});
+  }
+
+  void _handleInstructInfoTap() {
+    widget.controller.open(
+      key: ConstViewKey.instructInfo,
+      tab: '指令下单',
+      contentIfAbsent: (_) => const InstructMainPage(),
+    );
+    setState(() {});
   }
 
   @override
@@ -53,9 +64,9 @@ class _ToolState extends State<Tool> {
         ? Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Setting.backGroundColor,
-              border: Border(bottom: BorderSide(color: Setting.backBorderColor))
-            ),
+                color: Setting.backGroundColor,
+                border:
+                    Border(bottom: BorderSide(color: Setting.backBorderColor))),
             child: Row(
               children: [
                 InkWell(
@@ -77,11 +88,23 @@ class _ToolState extends State<Tool> {
                   child: Row(
                     children: [
                       buildHToolButton(
-                          key: ConstViewKey.hedgeInfo,
-                          name: '交易',
-                          callback: () {
-                            _handleHedgeInfoTap();
-                          }),
+                        key: ConstViewKey.transactionInfo,
+                        isSelect: widget.controller.current?.key ==
+                            ConstViewKey.transactionInfo,
+                        name: '交易',
+                        callback: () {
+                          _handleHedgeInfoTap();
+                        },
+                      ),
+                      buildHToolButton(
+                        key: ConstViewKey.instructInfo,
+                        isSelect: widget.controller.current?.key ==
+                            ConstViewKey.instructInfo,
+                        name: '指令下单',
+                        callback: () {
+                          _handleInstructInfoTap();
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -116,18 +139,36 @@ class _ToolState extends State<Tool> {
                       Material(
                         type: MaterialType.transparency,
                         child: buildToolGroup(
-                          key: ConstViewKey.hedgeInfo,
+                          key: ConstViewKey.transactionInfo,
                           groupName: '',
                           icon: Icon(
                             const IconData(0xe623, fontFamily: 'AliIcons'),
                             size: 30,
                             color: widget.controller.current?.key ==
-                                    ConstViewKey.hedgeInfo
+                                    ConstViewKey.transactionInfo
                                 ? const Color(0xff50A250)
                                 : Colors.white,
                           ),
                           callback: () {
                             _handleHedgeInfoTap();
+                          },
+                        ),
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: buildToolGroup(
+                          key: ConstViewKey.instructInfo,
+                          groupName: '',
+                          icon: Icon(
+                            const IconData(0xe623, fontFamily: 'AliIcons'),
+                            size: 30,
+                            color: widget.controller.current?.key ==
+                                    ConstViewKey.instructInfo
+                                ? const Color(0xff50A250)
+                                : Colors.white,
+                          ),
+                          callback: () {
+                            _handleInstructInfoTap();
                           },
                         ),
                       ),
@@ -223,14 +264,16 @@ class _ToolState extends State<Tool> {
   }
 
   Widget buildHToolButton(
-      {required ViewKey key, String? name, VoidCallback? callback}) {
+      {required ViewKey key,
+      String? name,
+      VoidCallback? callback,
+      bool isSelect = false}) {
     return InkWell(
       onTap: () {
         callback?.call();
       },
       child: Container(
         width: 100,
-        margin: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
           children: [
             Expanded(
@@ -238,18 +281,15 @@ class _ToolState extends State<Tool> {
                 child: Text(
                   '$name',
                   style: TextStyle(
-                    fontWeight: widget.controller.current?.key == key
-                        ? FontWeight.bold
-                        : FontWeight.normal,
+                    fontWeight: isSelect ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
             ),
             Container(
               height: 4,
-              color: widget.controller.current?.key == key
-                  ? Setting.tabBottomColor
-                  : Setting.backGroundColor,
+              color:
+                  isSelect ? Setting.tabBottomColor : Setting.backGroundColor,
             ),
           ],
         ),
