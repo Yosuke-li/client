@@ -268,7 +268,7 @@ class _CommonFormState<T> extends State<CommonForm<T>> {
       decoration: BoxDecoration(
           border: Border.all(width: 0.1, color: const Color(0xE6797979)),
           color: color),
-      height: screenUtil.adaptive(36),
+      height: 26,
       width: width ?? 125,
       padding: const EdgeInsets.all(4),
       alignment: Alignment.center,

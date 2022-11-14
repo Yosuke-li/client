@@ -62,7 +62,7 @@ class _HeadWidgetState extends State<HeadWidgetPage> {
                 bottom: BorderSide(color: Setting.bottomBorderColor),
               ),
             ),
-            height: screenUtil.adaptive(55),
+            height: screenUtil.adaptive(75),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

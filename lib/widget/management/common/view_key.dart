@@ -36,5 +36,6 @@ class ViewKeyWidget extends StatelessWidget {
 class ConstViewKey {
   static const ViewKey transactionInfo = ViewKey(namespace: 'transaction', id: 'transaction');
   static const ViewKey instructInfo = ViewKey(namespace: 'instruct', id: 'instruct');
+  static const ViewKey autoStrategy = ViewKey(namespace: 'autoStrategy', id: 'autoStrategy');
 
 }

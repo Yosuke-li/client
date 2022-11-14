@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:transaction_client/global/setting.dart';
+import 'package:transaction_client/page/auto_strategy/auto_main.dart';
 import 'package:transaction_client/page/instructions/main/instruct_main.dart';
 import 'package:transaction_client/page/transaction/common/home.dart';
 import 'package:transaction_client/widget/management/common/view_key.dart';
@@ -45,6 +46,15 @@ class _ToolState extends State<Tool> {
       key: ConstViewKey.instructInfo,
       tab: '指令下单',
       contentIfAbsent: (_) => const InstructMainPage(),
+    );
+    setState(() {});
+  }
+
+  void _handleAutoStrategyTap() {
+    widget.controller.open(
+      key: ConstViewKey.autoStrategy,
+      tab: '自动策略',
+      contentIfAbsent: (_) => const AutoStrategyPage(),
     );
     setState(() {});
   }
@@ -103,6 +113,15 @@ class _ToolState extends State<Tool> {
                         name: '指令下单',
                         callback: () {
                           _handleInstructInfoTap();
+                        },
+                      ),
+                      buildHToolButton(
+                        key: ConstViewKey.autoStrategy,
+                        isSelect: widget.controller.current?.key ==
+                            ConstViewKey.autoStrategy,
+                        name: '自动策略',
+                        callback: () {
+                          _handleAutoStrategyTap();
                         },
                       ),
                     ],

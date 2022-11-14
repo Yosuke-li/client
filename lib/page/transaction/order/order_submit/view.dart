@@ -66,7 +66,6 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
   ];
 
   final _searchController = TextEditingController();
-  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -84,475 +83,470 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                 title: const Text('下单'),
               )
             : null,
-        body: SingleChildScrollView(
-          controller: _controller,
-          child: Container(
-            alignment: Alignment.center,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 500, minWidth: 300),
-              child: Form(
-                key: state.formKey,
-                child: Column(
+        body: Form(
+          key: state.formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                margin: EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: screenUtil.adaptive(30),
-                        right: screenUtil.adaptive(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Expanded(
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Column(
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          const Text(
-                                            '合约',
-                                            style: TextStyle(),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              Order.Modal(context);
-                                            },
-                                            child: const Icon(
-                                              Icons.search,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          state.readOnly.value =
-                                              !state.readOnly.value;
-                                        },
-                                        child: Icon(
-                                          state.readOnly.value
-                                              ? Icons.lock
-                                              : Icons.lock_open,
-                                          size: 18,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  child: SearchField(
-                                    suggestions: _suggestions,
-                                    controller: _searchController,
-                                    readOnly: state.readOnly.value,
-                                    hint: '选择合约',
-                                    searchAlignVertical:
-                                        TextAlignVertical.bottom,
-                                    searchStyle: const TextStyle(
-                                      fontSize: 14
+                                Row(
+                                  children: [
+                                    const Text(
+                                      '合约',
+                                      style: TextStyle(),
                                     ),
-                                    initialValue: _suggestions[2],
-                                    searchInputDecoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.black.withOpacity(0.8),
-                                        ),
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.red),
+                                    InkWell(
+                                      onTap: () {
+                                        Order.Modal(context);
+                                      },
+                                      child: const Icon(
+                                        Icons.search,
+                                        size: 18,
                                       ),
                                     ),
-                                    maxSuggestionsInViewPort: 4,
-                                    itemHeight: screenUtil.adaptive(30),
-                                    onTap: (x) {
-                                      print(
-                                          'selected =$x ${_searchController.text}');
-                                    },
-                                  ),
+                                  ],
                                 ),
+                                InkWell(
+                                  onTap: () {
+                                    state.readOnly.value =
+                                    !state.readOnly.value;
+                                  },
+                                  child: Icon(
+                                    state.readOnly.value
+                                        ? Icons.lock
+                                        : Icons.lock_open,
+                                    size: 18,
+                                  ),
+                                )
                               ],
                             ),
                           ),
-                          SizedBox(
-                            width: screenUtil.adaptive(20),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    '手数',
-                                    style: TextStyle(),
+                          Container(
+                            child: SearchField(
+                              suggestions: _suggestions,
+                              controller: _searchController,
+                              readOnly: state.readOnly.value,
+                              hint: '选择合约',
+                              searchAlignVertical:
+                              TextAlignVertical.bottom,
+                              searchStyle: const TextStyle(
+                                  fontSize: 14
+                              ),
+                              initialValue: _suggestions[2],
+                              searchInputDecoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black.withOpacity(0.8),
                                   ),
                                 ),
-                                Container(
-                                  child: TextInputNumberUpDown(
-                                    height: screenUtil.adaptive(30),
-                                    focusNode: FocusNode(),
-                                    key: const Key('Hand'),
-                                    onSave: (String? value) {},
-                                    rulesFunc: RulesFunc(
-                                      upRule: (controller) {
-                                        if (controller.text.isEmpty == true) {
-                                          controller.text = '1';
-                                        } else {
-                                          controller.text =
-                                              (int.tryParse(controller.text)! +
-                                                      1)
-                                                  .toString();
-                                        }
-                                      },
-                                      downRule: (controller) {
-                                        if (controller.text.isEmpty == true) {
-                                          controller.text = '0';
-                                        } else if (int.tryParse(
-                                                controller.text)! >
-                                            0) {
-                                          controller.text =
-                                              (int.tryParse(controller.text)! -
-                                                      1)
-                                                  .toString();
-                                        }
-                                      },
-                                    ),
-                                  ),
+                                border: const OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.red),
                                 ),
-                              ],
+                              ),
+                              maxSuggestionsInViewPort: 4,
+                              itemHeight: 30,
+                              onTap: (x) {
+                                print(
+                                    'selected =$x ${_searchController.text}');
+                              },
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: screenUtil.adaptive(30),
-                        right: screenUtil.adaptive(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    SizedBox(
+                        width: 20
+                    ),
+                    Expanded(
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    '价格',
-                                    style: TextStyle(),
-                                  ),
-                                ),
-                                Container(
-                                  child: TextInputNumberUpDown(
-                                    focusNode: FocusNode(),
-                                    key: const Key('Price'),
-                                    height: screenUtil.adaptive(30),
-                                    onSave: (String? value) {},
-                                    rulesFunc: RulesFunc(
-                                      upRule: (controller) {
-                                        if (controller.text.isEmpty == true) {
-                                          controller.text = '1';
-                                        } else {
-                                          controller.text =
-                                              (int.tryParse(controller.text)! +
-                                                      1)
-                                                  .toString();
-                                        }
-                                      },
-                                      downRule: (controller) {
-                                        if (controller.text.isEmpty == true) {
-                                          controller.text = '0';
-                                        } else if (int.tryParse(
-                                                controller.text)! >
-                                            0) {
-                                          controller.text =
-                                              (int.tryParse(controller.text)! -
-                                                      1)
-                                                  .toString();
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              '手数',
+                              style: TextStyle(),
                             ),
                           ),
-                          SizedBox(
-                            width: screenUtil.adaptive(20),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    '方向',
-                                    style: TextStyle(),
-                                  ),
-                                ),
-                                Container(
-                                  height: screenUtil.adaptive(30),
-                                  alignment: Alignment.centerLeft,
-                                  child: Obx(
-                                    () => OverlayField<int>(
-                                      key: const Key('Side'),
-                                      maxHeight: 60,
-                                      initValue: '${state.side.value}',
-                                      lists: state.sides,
-                                      textStyle: const TextStyle(fontSize: 14),
-                                      onChange: (int e) {
-                                        state.side.value = e;
-                                      },
-                                      child: (int e) {
-                                        return Container(
-                                          height: 20,
-                                          alignment: Alignment.centerLeft,
-                                          margin:
-                                              const EdgeInsets.all(4),
-                                          child: Text('$e'),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Container(
+                            child: TextInputNumberUpDown(
+                              height: 30,
+                              focusNode: FocusNode(),
+                              key: const Key('Hand'),
+                              onSave: (String? value) {},
+                              rulesFunc: RulesFunc(
+                                upRule: (controller) {
+                                  if (controller.text.isEmpty == true) {
+                                    controller.text = '1';
+                                  } else {
+                                    controller.text =
+                                        (int.tryParse(controller.text)! +
+                                            1)
+                                            .toString();
+                                  }
+                                },
+                                downRule: (controller) {
+                                  if (controller.text.isEmpty == true) {
+                                    controller.text = '0';
+                                  } else if (int.tryParse(
+                                      controller.text)! >
+                                      0) {
+                                    controller.text =
+                                        (int.tryParse(controller.text)! -
+                                            1)
+                                            .toString();
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: screenUtil.adaptive(30),
-                        right: screenUtil.adaptive(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    '开平',
-                                    style: TextStyle(),
-                                  ),
-                                ),
-                                Container(
-                                  height: screenUtil.adaptive(30),
-                                  alignment: Alignment.centerLeft,
-                                  child: Obx(
-                                    () => OverlayField<int>(
-                                      key: const Key('OpenFlag'),
-                                      maxHeight: 100,
-                                      initValue: '${state.openFlag.value}',
-                                      lists: state.openFlags,
-                                      textStyle: const TextStyle(fontSize: 14),
-                                      onChange: (int e) {
-                                        state.openFlag.value = e;
-                                      },
-                                      child: (int e) {
-                                        return Container(
-                                          height: 20,
-                                          alignment: Alignment.centerLeft,
-                                          margin:
-                                              const EdgeInsets.only(left: 4),
-                                          child: Text('$e'),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: screenUtil.adaptive(20),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    '投保',
-                                    style: TextStyle(),
-                                  ),
-                                ),
-                                Container(
-                                  height: screenUtil.adaptive(30),
-                                  alignment: Alignment.centerLeft,
-                                  child: Obx(
-                                    () => OverlayField<int>(
-                                      key: const Key('HedgeFlag'),
-                                      maxHeight: 100,
-                                      initValue: '${state.hedgeFlag.value}',
-                                      lists: state.hedgeFlags,
-                                      textStyle: const TextStyle(fontSize: 14),
-                                      onChange: (int e) {
-                                        state.hedgeFlag.value = e;
-                                      },
-                                      child: (int e) {
-                                        return Container(
-                                          height: 20,
-                                          alignment: Alignment.centerLeft,
-                                          margin:
-                                              const EdgeInsets.only(left: 4),
-                                          child: Text('$e'),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: screenUtil.adaptive(30),
-                        right: screenUtil.adaptive(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    '类型',
-                                    style: TextStyle(),
-                                  ),
-                                ),
-                                Container(
-                                  height: screenUtil.adaptive(30),
-                                  alignment: Alignment.centerLeft,
-                                  child: Obx(
-                                    () => OverlayField<int>(
-                                      key: const Key('OrdType'),
-                                      initValue: '${state.ordType.value}',
-                                      lists: state.ordTypes,
-                                      textStyle: const TextStyle(fontSize: 14),
-                                      onChange: (int e) {
-                                        state.ordType.value = e;
-                                      },
-                                      child: (int e) {
-                                        return Container(
-                                          height: 20,
-                                          alignment: Alignment.centerLeft,
-                                          margin:
-                                              const EdgeInsets.only(left: 4),
-                                          child: Text('$e'),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: screenUtil.adaptive(20),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.only(
-                                      top: screenUtil.adaptive(15),
-                                      bottom: screenUtil.adaptive(10)),
-                                  child: const Text(
-                                    'TIF类',
-                                    style: TextStyle(),
-                                  ),
-                                ),
-                                Container(
-                                  height: screenUtil.adaptive(30),
-                                  alignment: Alignment.center,
-                                  child: Obx(
-                                    () => OverlayField<int>(
-                                      key: const Key('Tif'),
-                                      maxHeight: 100,
-                                      initValue: '${state.tif.value}',
-                                      lists: state.tifs,
-                                      textStyle: const TextStyle(fontSize: 14),
-                                      onChange: (int e) {
-                                        state.tif.value = e;
-                                      },
-                                      child: (int e) {
-                                        return Container(
-                                          height: 20,
-                                          alignment: Alignment.centerLeft,
-                                          margin:
-                                              const EdgeInsets.only(left: 4),
-                                          child: Text('$e'),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        logic.onSubmit();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Setting.orderSubmitColor),
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.only(right: 100, left: 100),
-                        ),
-                      ),
-                      child: const Text(
-                        '下单',
-                        style: TextStyle(
-                          color: Color(0xff333333),
-                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
+              Container(
+                margin: EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              '价格',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            child: TextInputNumberUpDown(
+                              focusNode: FocusNode(),
+                              key: const Key('Price'),
+                              height: 30,
+                              onSave: (String? value) {},
+                              rulesFunc: RulesFunc(
+                                upRule: (controller) {
+                                  if (controller.text.isEmpty == true) {
+                                    controller.text = '1';
+                                  } else {
+                                    controller.text =
+                                        (int.tryParse(controller.text)! +
+                                            1)
+                                            .toString();
+                                  }
+                                },
+                                downRule: (controller) {
+                                  if (controller.text.isEmpty == true) {
+                                    controller.text = '0';
+                                  } else if (int.tryParse(
+                                      controller.text)! >
+                                      0) {
+                                    controller.text =
+                                        (int.tryParse(controller.text)! -
+                                            1)
+                                            .toString();
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        width: 20
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              '方向',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            height: 30,
+                            alignment: Alignment.centerLeft,
+                            child: Obx(
+                                  () => OverlayField<int>(
+                                key: const Key('Side'),
+                                maxHeight: 60,
+                                initValue: '${state.side.value}',
+                                lists: state.sides,
+                                textStyle: const TextStyle(fontSize: 14),
+                                onChange: (int e) {
+                                  state.side.value = e;
+                                },
+                                child: (int e) {
+                                  return Container(
+                                    height: 20,
+                                    alignment: Alignment.centerLeft,
+                                    margin:
+                                    const EdgeInsets.all(4),
+                                    child: Text('$e'),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              '开平',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            height: 30,
+                            alignment: Alignment.centerLeft,
+                            child: Obx(
+                                  () => OverlayField<int>(
+                                key: const Key('OpenFlag'),
+                                maxHeight: 100,
+                                initValue: '${state.openFlag.value}',
+                                lists: state.openFlags,
+                                textStyle: const TextStyle(fontSize: 14),
+                                onChange: (int e) {
+                                  state.openFlag.value = e;
+                                },
+                                child: (int e) {
+                                  return Container(
+                                    height: 20,
+                                    alignment: Alignment.centerLeft,
+                                    margin:
+                                    const EdgeInsets.only(left: 4),
+                                    child: Text('$e'),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        width: 20
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              '投保',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            height: 30,
+                            alignment: Alignment.centerLeft,
+                            child: Obx(
+                                  () => OverlayField<int>(
+                                key: const Key('HedgeFlag'),
+                                maxHeight: 100,
+                                initValue: '${state.hedgeFlag.value}',
+                                lists: state.hedgeFlags,
+                                textStyle: const TextStyle(fontSize: 14),
+                                onChange: (int e) {
+                                  state.hedgeFlag.value = e;
+                                },
+                                child: (int e) {
+                                  return Container(
+                                    height: 20,
+                                    alignment: Alignment.centerLeft,
+                                    margin:
+                                    const EdgeInsets.only(left: 4),
+                                    child: Text('$e'),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              '类型',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            height: 30,
+                            alignment: Alignment.centerLeft,
+                            child: Obx(
+                                  () => OverlayField<int>(
+                                key: const Key('OrdType'),
+                                initValue: '${state.ordType.value}',
+                                lists: state.ordTypes,
+                                textStyle: const TextStyle(fontSize: 14),
+                                onChange: (int e) {
+                                  state.ordType.value = e;
+                                },
+                                child: (int e) {
+                                  return Container(
+                                    height: 20,
+                                    alignment: Alignment.centerLeft,
+                                    margin:
+                                    const EdgeInsets.only(left: 4),
+                                    child: Text('$e'),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        width: 20
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(
+                                top: screenUtil.adaptive(15),
+                                bottom: screenUtil.adaptive(10)),
+                            child: const Text(
+                              'TIF类',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            height: 30,
+                            alignment: Alignment.center,
+                            child: Obx(
+                                  () => OverlayField<int>(
+                                key: const Key('Tif'),
+                                maxHeight: 100,
+                                initValue: '${state.tif.value}',
+                                lists: state.tifs,
+                                textStyle: const TextStyle(fontSize: 14),
+                                onChange: (int e) {
+                                  state.tif.value = e;
+                                },
+                                child: (int e) {
+                                  return Container(
+                                    height: 20,
+                                    alignment: Alignment.centerLeft,
+                                    margin:
+                                    const EdgeInsets.only(left: 4),
+                                    child: Text('$e'),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  logic.onSubmit();
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all(Setting.orderSubmitColor),
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.only(right: 100, left: 100),
+                  ),
+                ),
+                child: const Text(
+                  '下单',
+                  style: TextStyle(
+                    color: Color(0xff333333),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+            ],
           ),
         ),
       ),

@@ -27,7 +27,6 @@ class DiskPortDetail {
 
 class _DiskPortDetailState extends State<DiskPortDetailPage> {
   List<DiskPortDetail> disk = [];
-  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -70,132 +69,127 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RepaintBoundary(
-        child: SingleChildScrollView(
-          controller: _controller,
-          child: Container(
-            alignment: Alignment.center,
-            child: widget.type == DiskPortType.TypeOne ? ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 200, minWidth: 150),
-              child: Column(
-                children: [
-                  ListView(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: disk.map((e) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                            right: screenUtil.adaptive(15),
-                            left: screenUtil.adaptive(15)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${e.name}'),
-                            Text(
-                              '${e.code}',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                            Text('${e.value}'),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: screenUtil.adaptive(10),
-                        bottom: screenUtil.adaptive(10)),
-                    width: MediaQuery.of(context).size.width,
-                    height: 0.5,
-                    color: Colors.white,
-                  ),
-                  ListView(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: disk.map((e) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                            right: screenUtil.adaptive(15),
-                            left: screenUtil.adaptive(15)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${e.name}'),
-                            Text(
-                              '${e.code}',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                            Text('${e.value}'),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: screenUtil.adaptive(10),
-                        bottom: screenUtil.adaptive(10)),
-                    width: MediaQuery.of(context).size.width,
-                    height: 0.5,
-                    color: Colors.white,
-                  ),
-                  Container(
+        child: Container(
+          alignment: Alignment.center,
+          child: widget.type == DiskPortType.TypeOne ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ListView(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: disk.map((e) {
+                  return Container(
                     margin: EdgeInsets.only(
                         right: screenUtil.adaptive(15),
                         left: screenUtil.adaptive(15)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('涨停'),
+                        Text('${e.name}'),
                         Text(
-                          '155121',
+                          '${e.code}',
                           style: TextStyle(color: Colors.red),
                         ),
+                        Text('${e.value}'),
                       ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        right: screenUtil.adaptive(15),
-                        left: screenUtil.adaptive(15)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('跌停'),
-                        Text(
-                          '155121',
-                          style: TextStyle(color: Colors.green),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: screenUtil.adaptive(10),
-                        bottom: screenUtil.adaptive(10)),
-                    width: MediaQuery.of(context).size.width,
-                    height: 0.5,
-                    color: Colors.white,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        right: screenUtil.adaptive(15),
-                        left: screenUtil.adaptive(15),
-                        bottom: screenUtil.adaptive(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('昨收'),
-                        Text(
-                          '155121',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
-            ) : Container(),
-          ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: screenUtil.adaptive(10),
+                    bottom: screenUtil.adaptive(10)),
+                width: MediaQuery.of(context).size.width,
+                height: 0.5,
+                color: Colors.white,
+              ),
+              ListView(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: disk.map((e) {
+                  return Container(
+                    margin: EdgeInsets.only(
+                        right: screenUtil.adaptive(15),
+                        left: screenUtil.adaptive(15)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${e.name}'),
+                        Text(
+                          '${e.code}',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text('${e.value}'),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: screenUtil.adaptive(10),
+                    bottom: screenUtil.adaptive(10)),
+                width: MediaQuery.of(context).size.width,
+                height: 0.5,
+                color: Colors.white,
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    right: screenUtil.adaptive(15),
+                    left: screenUtil.adaptive(15)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('涨停'),
+                    Text(
+                      '155121',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    right: screenUtil.adaptive(15),
+                    left: screenUtil.adaptive(15)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('跌停'),
+                    Text(
+                      '155121',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: screenUtil.adaptive(10),
+                    bottom: screenUtil.adaptive(10)),
+                width: MediaQuery.of(context).size.width,
+                height: 0.5,
+                color: Colors.white,
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    right: screenUtil.adaptive(15),
+                    left: screenUtil.adaptive(15),
+                    bottom: screenUtil.adaptive(10)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('昨收'),
+                    Text(
+                      '155121',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ) : Container(),
         ),
       ),
     );
