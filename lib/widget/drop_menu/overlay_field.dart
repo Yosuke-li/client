@@ -82,7 +82,7 @@ class _OverlayFieldState<T> extends State<OverlayField<T>> {
             elevation: 4,
             child: RepaintBoundary(
               child: SingleChildScrollView(
-                child: widget.lists.length > 0 ? Container(
+                child: widget.lists.isNotEmpty ? SizedBox(
                   height: widget.maxHeight,
                   child: ListView(
                     padding: EdgeInsets.zero,
@@ -171,10 +171,11 @@ class _OverlayFieldState<T> extends State<OverlayField<T>> {
     }
 
     _focusNode.removeListener(() {
-      if (_focusNode.hasFocus)
+      if (_focusNode.hasFocus) {
         _createOverlay();
-      else
+      } else {
         closeOverlay();
+      }
     });
     _focusNode.dispose();
     _controller.dispose();

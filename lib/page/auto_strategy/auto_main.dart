@@ -12,7 +12,7 @@ class _AutoStrategyPageState extends State<AutoStrategyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: OrderSubmitPage(),
+      body: Container(),
     );
   }
 }

@@ -28,20 +28,22 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller = MultiSplitViewController(areas: [
-        Area(minimalWeight: .05, weight: .35),
-        Area(minimalWeight: .3),
+        Area(weight: 0.15, minimalWeight: 0.15),
+        Area(weight: 0.25, minimalWeight: 0.2),
+        Area(weight: 0.6, minimalWeight: 0.4)
       ]);
       multiSplitView = MultiSplitView(
-        axis: Axis.vertical,
+        axis: Axis.horizontal,
         controller: _controller,
-        children: [const QuotationPage(), _buildContainer()],
+        children: [_diskPortWidget(), _orderWidget(), const _TabView()],
         onWeightChange: () {},
       );
 
       theme = MultiSplitViewTheme(
         data: MultiSplitViewThemeData(
-            dividerPainter: DividerPainters.grooved1(
-                color: Colors.indigo[100]!,
+            dividerThickness: 1.5,
+            dividerPainter: DividerPainters.background(
+                color: const Color(0x30333333),
                 highlightedColor: Colors.indigo[900]!)),
         child: multiSplitView,
       );
@@ -62,105 +64,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                 bottom: BorderSide(color: Setting.bottomBorderColor),
               ),
             ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.15,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom:
-                                BorderSide(color: Setting.bottomBorderColor),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: screenUtil.adaptive(10),
-                                left: screenUtil.adaptive(8),
-                                top: screenUtil.adaptive(5),
-                                bottom: screenUtil.adaptive(5),
-                              ),
-                              alignment: Alignment.center,
-                              height: 30,
-                              child: const Text(
-                                '盘口信息[合约]',
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: RepaintBoundary(
-                          child: DiskPortDetailPage(
-                            type: DiskPortType.TypeOne,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 1,
-                  child: Container(
-                    color: Setting.bottomBorderColor,
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: Column(
-                    children: [
-                      Container(
-                          alignment: Alignment.topLeft,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom:
-                                  BorderSide(color: Setting.bottomBorderColor),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: screenUtil.adaptive(15),
-                                  left: screenUtil.adaptive(15),
-                                  top: screenUtil.adaptive(3),
-                                  bottom: screenUtil.adaptive(3),
-                                ),
-                                alignment: Alignment.center,
-                                height: 30,
-                                color: Setting.tabSelectColor,
-                                child: const Text(
-                                  '期货下单',
-                                ),
-                              )
-                            ],
-                          )),
-                      Expanded(
-                        child: OrderSubmitPage(
-                          showTitle: false,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 1,
-                  child: Container(
-                    color: Setting.bottomBorderColor,
-                  ),
-                ),
-                Expanded(
-                  child: _TabView(),
-                ),
-              ],
-            ),
+            child: theme,
           ),
         ),
         const BottomWidgetPage(),
@@ -182,99 +86,21 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
               ),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom:
-                                  BorderSide(color: Setting.bottomBorderColor),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: screenUtil.adaptive(10),
-                                  left: screenUtil.adaptive(8),
-                                  top: screenUtil.adaptive(5),
-                                  bottom: screenUtil.adaptive(5),
-                                ),
-                                alignment: Alignment.center,
-                                height: 30,
-                                child: const Text(
-                                  '盘口信息[合约]',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: RepaintBoundary(
-                            child: DiskPortDetailPage(
-                              type: DiskPortType.TypeOne,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _diskPortWidget(),
                   SizedBox(
                     width: 1,
                     child: Container(
                       color: Setting.bottomBorderColor,
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    child: Column(
-                      children: [
-                        Container(
-                            alignment: Alignment.topLeft,
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    color: Setting.bottomBorderColor),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    right: screenUtil.adaptive(15),
-                                    left: screenUtil.adaptive(15),
-                                    top: screenUtil.adaptive(3),
-                                    bottom: screenUtil.adaptive(3),
-                                  ),
-                                  alignment: Alignment.center,
-                                  height: 30,
-                                  color: Setting.tabSelectColor,
-                                  child: const Text(
-                                    '期货下单',
-                                  ),
-                                )
-                              ],
-                            )),
-                        Expanded(
-                          child: OrderSubmitPage(
-                            showTitle: false,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _orderWidget(),
                   SizedBox(
                     width: 1,
                     child: Container(
                       color: Setting.bottomBorderColor,
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     child: _TabView(),
                   ),
                 ],
@@ -282,6 +108,90 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
             ),
           ),
           const BottomWidgetPage(),
+        ],
+      ),
+    );
+  }
+
+  Widget _diskPortWidget() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.15,
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Setting.bottomBorderColor),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    right: screenUtil.adaptive(10),
+                    left: screenUtil.adaptive(8),
+                    top: screenUtil.adaptive(5),
+                    bottom: screenUtil.adaptive(5),
+                  ),
+                  alignment: Alignment.center,
+                  height: 30,
+                  child: const Text(
+                    '盘口信息[合约]',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: RepaintBoundary(
+              child: DiskPortDetailPage(
+                type: DiskPortType.TypeOne,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _orderWidget() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.25,
+      child: Column(
+        children: [
+          Container(
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Setting.bottomBorderColor),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      right: screenUtil.adaptive(15),
+                      left: screenUtil.adaptive(15),
+                      top: screenUtil.adaptive(3),
+                      bottom: screenUtil.adaptive(3),
+                    ),
+                    alignment: Alignment.center,
+                    height: 30,
+                    color: Setting.tabSelectColor,
+                    child: const Text(
+                      '期货下单',
+                    ),
+                  )
+                ],
+              )),
+          Expanded(
+            child: OrderSubmitPage(
+              showTitle: false,
+            ),
+          ),
         ],
       ),
     );

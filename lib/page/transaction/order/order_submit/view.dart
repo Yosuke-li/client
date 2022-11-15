@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/page/transaction/order/order_modal.dart';
@@ -105,8 +106,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                 top: screenUtil.adaptive(15),
                                 bottom: screenUtil.adaptive(10)),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
@@ -128,7 +128,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                 InkWell(
                                   onTap: () {
                                     state.readOnly.value =
-                                    !state.readOnly.value;
+                                        !state.readOnly.value;
                                   },
                                   child: Icon(
                                     state.readOnly.value
@@ -146,11 +146,8 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                               controller: _searchController,
                               readOnly: state.readOnly.value,
                               hint: '选择合约',
-                              searchAlignVertical:
-                              TextAlignVertical.bottom,
-                              searchStyle: const TextStyle(
-                                  fontSize: 14
-                              ),
+                              searchAlignVertical: TextAlignVertical.bottom,
+                              searchStyle: const TextStyle(fontSize: 14),
                               initialValue: _suggestions[2],
                               searchInputDecoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -159,24 +156,20 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   ),
                                 ),
                                 border: const OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.red),
+                                  borderSide: BorderSide(color: Colors.red),
                                 ),
                               ),
                               maxSuggestionsInViewPort: 4,
                               itemHeight: 30,
                               onTap: (x) {
-                                print(
-                                    'selected =$x ${_searchController.text}');
+                                print('selected =$x ${_searchController.text}');
                               },
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(
-                        width: 20
-                    ),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: Column(
                         children: [
@@ -191,35 +184,37 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             ),
                           ),
                           Container(
-                            child: TextInputNumberUpDown(
-                              height: 30,
-                              focusNode: FocusNode(),
-                              key: const Key('Hand'),
-                              onSave: (String? value) {},
-                              rulesFunc: RulesFunc(
-                                upRule: (controller) {
-                                  if (controller.text.isEmpty == true) {
-                                    controller.text = '1';
-                                  } else {
-                                    controller.text =
-                                        (int.tryParse(controller.text)! +
-                                            1)
-                                            .toString();
-                                  }
-                                },
-                                downRule: (controller) {
-                                  if (controller.text.isEmpty == true) {
-                                    controller.text = '0';
-                                  } else if (int.tryParse(
-                                      controller.text)! >
-                                      0) {
-                                    controller.text =
-                                        (int.tryParse(controller.text)! -
-                                            1)
-                                            .toString();
-                                  }
-                                },
+                            height: 30,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(3),
+                              border: Border.all(
+                                color: const Color(0xff797979),
+                                width: 1.0,
+                                style: BorderStyle.solid,
                               ),
+                            ),
+                            child: TextFormField(
+                              cursorHeight: 18,
+                              decoration: const InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00ffffff),
+                                    width: 0.0,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00ffffff),
+                                    width: 0.0,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 6),
+                              ),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                              ],
+                              onSaved: (value) {},
                             ),
                           ),
                         ],
@@ -261,20 +256,17 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                     controller.text = '1';
                                   } else {
                                     controller.text =
-                                        (int.tryParse(controller.text)! +
-                                            1)
+                                        (int.tryParse(controller.text)! + 1)
                                             .toString();
                                   }
                                 },
                                 downRule: (controller) {
                                   if (controller.text.isEmpty == true) {
                                     controller.text = '0';
-                                  } else if (int.tryParse(
-                                      controller.text)! >
+                                  } else if (int.tryParse(controller.text)! >
                                       0) {
                                     controller.text =
-                                        (int.tryParse(controller.text)! -
-                                            1)
+                                        (int.tryParse(controller.text)! - 1)
                                             .toString();
                                   }
                                 },
@@ -284,9 +276,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                        width: 20
-                    ),
+                    SizedBox(width: 20),
                     Expanded(
                       child: Column(
                         children: [
@@ -304,7 +294,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                                  () => OverlayField<int>(
+                              () => OverlayField<int>(
                                 key: const Key('Side'),
                                 maxHeight: 60,
                                 initValue: '${state.side.value}',
@@ -317,8 +307,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin:
-                                    const EdgeInsets.all(4),
+                                    margin: const EdgeInsets.all(4),
                                     child: Text('$e'),
                                   );
                                 },
@@ -356,7 +345,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                                  () => OverlayField<int>(
+                              () => OverlayField<int>(
                                 key: const Key('OpenFlag'),
                                 maxHeight: 100,
                                 initValue: '${state.openFlag.value}',
@@ -369,8 +358,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin:
-                                    const EdgeInsets.only(left: 4),
+                                    margin: const EdgeInsets.only(left: 4),
                                     child: Text('$e'),
                                   );
                                 },
@@ -380,9 +368,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                        width: 20
-                    ),
+                    SizedBox(width: 20),
                     Expanded(
                       child: Column(
                         children: [
@@ -400,7 +386,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                                  () => OverlayField<int>(
+                              () => OverlayField<int>(
                                 key: const Key('HedgeFlag'),
                                 maxHeight: 100,
                                 initValue: '${state.hedgeFlag.value}',
@@ -413,8 +399,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin:
-                                    const EdgeInsets.only(left: 4),
+                                    margin: const EdgeInsets.only(left: 4),
                                     child: Text('$e'),
                                   );
                                 },
@@ -452,7 +437,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                                  () => OverlayField<int>(
+                              () => OverlayField<int>(
                                 key: const Key('OrdType'),
                                 initValue: '${state.ordType.value}',
                                 lists: state.ordTypes,
@@ -464,8 +449,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin:
-                                    const EdgeInsets.only(left: 4),
+                                    margin: const EdgeInsets.only(left: 4),
                                     child: Text('$e'),
                                   );
                                 },
@@ -475,9 +459,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                        width: 20
-                    ),
+                    SizedBox(width: 20),
                     Expanded(
                       child: Column(
                         children: [
@@ -495,7 +477,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.center,
                             child: Obx(
-                                  () => OverlayField<int>(
+                              () => OverlayField<int>(
                                 key: const Key('Tif'),
                                 maxHeight: 100,
                                 initValue: '${state.tif.value}',
@@ -508,8 +490,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin:
-                                    const EdgeInsets.only(left: 4),
+                                    margin: const EdgeInsets.only(left: 4),
                                     child: Text('$e'),
                                   );
                                 },
@@ -531,7 +512,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.all(Setting.orderSubmitColor),
+                      MaterialStateProperty.all(Setting.orderSubmitColor),
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.only(right: 100, left: 100),
                   ),

@@ -61,6 +61,7 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
                 color: const Color(0xE6797979),
                 width: 1.0,
               ),
+              borderRadius: BorderRadius.circular(3)
             ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

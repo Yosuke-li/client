@@ -92,6 +92,11 @@ class _QuotationState extends State<QuotationPage> {
     }
   }
 
+  /// todo 点击将合约和现价发到下单页面
+  void _eventBus() {
+
+  }
+
   /// max height*0.6
   /// min height*0.04
   @override
