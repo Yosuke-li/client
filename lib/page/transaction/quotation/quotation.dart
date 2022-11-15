@@ -180,7 +180,7 @@ class _QuotationState extends State<QuotationPage> {
               ),
             ),
             CommonForm<Account>(
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: MediaQuery.of(context).size.height * 0.35,
               canDrag: canDrag,
               onTapFunc: (Account value) {
                 Log.info(value.username!);

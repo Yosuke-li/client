@@ -525,7 +525,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
             ],
           ),

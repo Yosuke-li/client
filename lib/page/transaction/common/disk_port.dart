@@ -102,7 +102,7 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                     bottom: screenUtil.adaptive(10)),
                 width: MediaQuery.of(context).size.width,
                 height: 0.5,
-                color: Colors.white,
+                color: Setting.backBorderColor,
               ),
               ListView(
                 physics: NeverScrollableScrollPhysics(),
@@ -132,7 +132,7 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                     bottom: screenUtil.adaptive(10)),
                 width: MediaQuery.of(context).size.width,
                 height: 0.5,
-                color: Colors.white,
+                color: Setting.backBorderColor,
               ),
               Container(
                 margin: EdgeInsets.only(
@@ -170,7 +170,7 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                     bottom: screenUtil.adaptive(10)),
                 width: MediaQuery.of(context).size.width,
                 height: 0.5,
-                color: Colors.white,
+                color: Setting.backBorderColor,
               ),
               Container(
                 margin: EdgeInsets.only(
