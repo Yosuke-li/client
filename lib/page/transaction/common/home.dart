@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 import 'package:transaction_client/global/setting.dart';
+import 'package:transaction_client/model/home_tab.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';
 import 'package:transaction_client/page/transaction/common/bottom_widget.dart';
 import 'package:transaction_client/page/transaction/quotation/quotation.dart';
@@ -34,9 +35,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
         axis: Axis.vertical,
         controller: _controller,
         children: [const QuotationPage(), _buildContainer()],
-        onWeightChange: () {
-
-        },
+        onWeightChange: () {},
       );
 
       theme = MultiSplitViewTheme(
@@ -74,7 +73,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom:
-                            BorderSide(color: Setting.bottomBorderColor),
+                                BorderSide(color: Setting.bottomBorderColor),
                           ),
                         ),
                         child: Row(
@@ -121,8 +120,8 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                           alignment: Alignment.topLeft,
                           decoration: BoxDecoration(
                             border: Border(
-                              bottom: BorderSide(
-                                  color: Setting.bottomBorderColor),
+                              bottom:
+                                  BorderSide(color: Setting.bottomBorderColor),
                             ),
                           ),
                           child: Row(
@@ -158,81 +157,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom:
-                            BorderSide(color: Setting.bottomBorderColor),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: screenUtil.adaptive(25),
-                                left: screenUtil.adaptive(25),
-                                top: screenUtil.adaptive(3),
-                                bottom: screenUtil.adaptive(3),
-                              ),
-                              alignment: Alignment.center,
-                              height: 30,
-                              color: Setting.tabSelectColor,
-                              child: const Text(
-                                '挂单',
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: screenUtil.adaptive(25),
-                                left: screenUtil.adaptive(25),
-                                top: screenUtil.adaptive(3),
-                                bottom: screenUtil.adaptive(3),
-                              ),
-                              alignment: Alignment.center,
-                              height: 30,
-                              child: const Text(
-                                '成交单',
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: screenUtil.adaptive(25),
-                                left: screenUtil.adaptive(25),
-                                top: screenUtil.adaptive(3),
-                                bottom: screenUtil.adaptive(3),
-                              ),
-                              alignment: Alignment.center,
-                              height: 30,
-                              child: const Text(
-                                '持仓',
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: screenUtil.adaptive(25),
-                                left: screenUtil.adaptive(25),
-                                top: screenUtil.adaptive(3),
-                                bottom: screenUtil.adaptive(3),
-                              ),
-                              alignment: Alignment.center,
-                              height: 30,
-                              child: const Text(
-                                '资金',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Expanded(
-                        child: RepaintBoundary(
-                          child: EntrustPage(),
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: _TabView(),
                 ),
               ],
             ),
@@ -350,81 +275,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom:
-                                  BorderSide(color: Setting.bottomBorderColor),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: screenUtil.adaptive(25),
-                                  left: screenUtil.adaptive(25),
-                                  top: screenUtil.adaptive(3),
-                                  bottom: screenUtil.adaptive(3),
-                                ),
-                                alignment: Alignment.center,
-                                height: 30,
-                                color: Setting.tabSelectColor,
-                                child: const Text(
-                                  '挂单',
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: screenUtil.adaptive(25),
-                                  left: screenUtil.adaptive(25),
-                                  top: screenUtil.adaptive(3),
-                                  bottom: screenUtil.adaptive(3),
-                                ),
-                                alignment: Alignment.center,
-                                height: 30,
-                                child: const Text(
-                                  '成交单',
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: screenUtil.adaptive(25),
-                                  left: screenUtil.adaptive(25),
-                                  top: screenUtil.adaptive(3),
-                                  bottom: screenUtil.adaptive(3),
-                                ),
-                                alignment: Alignment.center,
-                                height: 30,
-                                child: const Text(
-                                  '持仓',
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: screenUtil.adaptive(25),
-                                  left: screenUtil.adaptive(25),
-                                  top: screenUtil.adaptive(3),
-                                  bottom: screenUtil.adaptive(3),
-                                ),
-                                alignment: Alignment.center,
-                                height: 30,
-                                child: const Text(
-                                  '资金',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Expanded(
-                          child: RepaintBoundary(
-                            child: EntrustPage(),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: _TabView(),
                   ),
                 ],
               ),
@@ -433,6 +284,89 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
           const BottomWidgetPage(),
         ],
       ),
+    );
+  }
+}
+
+class _TabView extends StatefulWidget {
+  const _TabView({Key? key}) : super(key: key);
+
+  @override
+  State<_TabView> createState() => _TabViewState();
+}
+
+class _TabViewState extends State<_TabView> with TickerProviderStateMixin {
+  List<TabItem> pages = [];
+  int currentIndex = 0;
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() {
+    pages = initPages;
+    tabController = TabController(length: 4, vsync: this)
+      ..addListener(
+        () {
+          setState(() {
+            currentIndex = tabController.index;
+          });
+        },
+      );
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.topLeft,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Setting.bottomBorderColor),
+            ),
+          ),
+          child: Row(
+            children: pages.map((e) {
+              int index = pages.indexOf(e);
+              return InkWell(
+                onTap: () {
+                  tabController.animateTo(index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.linear);
+                },
+                child: Container(
+                  padding: EdgeInsets.only(
+                    right: screenUtil.adaptive(40),
+                    left: screenUtil.adaptive(40),
+                    top: screenUtil.adaptive(3),
+                    bottom: screenUtil.adaptive(3),
+                  ),
+                  alignment: Alignment.center,
+                  height: 30,
+                  color: currentIndex == index ? Setting.tabSelectColor : null,
+                  child: Text(
+                    e.name,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        Expanded(
+          child: RepaintBoundary(
+            child: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: tabController,
+              children: pages.map((e) => e.page).toList(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

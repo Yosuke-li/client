@@ -1,88 +1,37 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:native_context_menu/native_context_menu.dart' as native;
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/model/entrust.dart';
-import 'package:transaction_client/page/transaction/entrustment/page/change_order.dart';
-import 'package:transaction_client/page/transaction/entrustment/page/delete_order.dart';
 import 'package:transaction_client/page/transaction/entrustment/test_data.dart';
-import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/widget/circle_check_box.dart';
 import 'package:transaction_client/widget/management/widget/common_form.dart';
-import 'package:transaction_client/widget/modal_utils.dart';
 
-import 'entrust_modal.dart';
-
-enum EntrustType {
+enum PositionType {
   all,
-  delete,
-  canDelete,
-  finish,
+  today,
 }
 
-//挂单
-class EntrustPage extends StatefulWidget {
-  const EntrustPage({Key? key}) : super(key: key);
+enum PositionMerge {
+  variety,
+  contract,
+}
+
+class PositionPage extends StatefulWidget {
+  const PositionPage({Key? key}) : super(key: key);
 
   @override
-  _EntrustState createState() => _EntrustState();
+  State<PositionPage> createState() => _PositionPageState();
 }
 
-class _EntrustState extends State<EntrustPage> {
+class _PositionPageState extends State<PositionPage> with AutomaticKeepAliveClientMixin {
+  PositionType type = PositionType.all;
+  List<PositionMerge> merges = [];
   List<Entrust> entrusts = [];
-  late RightMenuFunc _rightMenuFunc;
-  EntrustType type = EntrustType.all;
 
   @override
   void initState() {
-    init();
     super.initState();
     entrusts = testData;
-  }
-
-  void init() {
-    // Log.info('init: ${widget.type}');
-    _rightMenuFunc = RightMenuFunc()
-      ..onItemSelected = (native.MenuItem item, int index) {
-        Log.info('index: $index');
-        item.onSelected?.call();
-      }
-      ..menuItems = [
-        native.MenuItem(
-          title: '改单',
-          onSelected: () async {
-            final bool? reBack = await EntrustModal.Modal(context,
-                child: ChangeOrder(),
-                title: '编辑改单',
-                size: ModalSize(width: 445, height: 310));
-          },
-        ),
-        native.MenuItem(
-          title: '撤单',
-          onSelected: () async {
-            final bool? reBack = await EntrustModal.Modal(
-              context,
-              child: DeleteOrder(),
-              title: '操作确认',
-              size: ModalSize(width: 400, height: 210),
-            );
-          },
-        ),
-        native.MenuItem(
-          title: '全撤',
-          onSelected: () async {
-            final bool? reBack = await EntrustModal.Modal(context,
-                child: Container(), title: '操作确认');
-          },
-        ),
-      ];
     setState(() {});
-  }
-
-  @override
-  void didUpdateWidget(covariant EntrustPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -94,132 +43,128 @@ class _EntrustState extends State<EntrustPage> {
             Container(
               margin: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 3),
-                          child: CircleCheckBox(
-                            size: 15,
-                            animationDuration:
-                                const Duration(milliseconds: 100),
-                            checkedWidget: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 12,
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 15),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 3),
+                              child: CircleCheckBox(
+                                size: 15,
+                                animationDuration:
+                                    const Duration(milliseconds: 100),
+                                checkedWidget: const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 12,
+                                ),
+                                checkedColor: const Color(0xcc4285F4),
+                                borderColor: type == PositionType.all
+                                    ? const Color(0xcc4285F4)
+                                    : Theme.of(context).disabledColor,
+                                isChecked: type == PositionType.all,
+                                onTap: (bool? value) {
+                                  type = PositionType.all;
+                                  setState(() {});
+                                },
+                              ),
                             ),
-                            checkedColor: const Color(0xcc4285F4),
-                            borderColor: type == EntrustType.all
-                                ? const Color(0xcc4285F4)
-                                : Theme.of(context).disabledColor,
-                            isChecked: type == EntrustType.all,
-                            onTap: (bool? value) {
-                              type = EntrustType.all;
-                              setState(() {});
-                            },
-                          ),
+                            const Text('全部'),
+                          ],
                         ),
-                        const Text('全部'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 3),
-                          child: CircleCheckBox(
-                            size: 15,
-                            animationDuration:
-                                const Duration(milliseconds: 100),
-                            checkedWidget: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 12,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 3),
+                            child: CircleCheckBox(
+                              size: 15,
+                              animationDuration:
+                                  const Duration(milliseconds: 100),
+                              checkedWidget: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 12,
+                              ),
+                              checkedColor: const Color(0xcc4285F4),
+                              borderColor: type == PositionType.today
+                                  ? const Color(0xcc4285F4)
+                                  : Theme.of(context).disabledColor,
+                              isChecked: type == PositionType.today,
+                              onTap: (bool? value) {
+                                type = PositionType.today;
+                                setState(() {});
+                              },
                             ),
-                            checkedColor: const Color(0xcc4285F4),
-                            borderColor: type == EntrustType.canDelete
-                                ? const Color(0xcc4285F4)
-                                : Theme.of(context).disabledColor,
-                            isChecked: type == EntrustType.canDelete,
-                            onTap: (bool? value) {
-                              type = EntrustType.canDelete;
-                              setState(() {});
-                            },
                           ),
-                        ),
-                        const Text('可撤'),
-                      ],
-                    ),
+                          const Text('今日'),
+                        ],
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 3),
-                          child: CircleCheckBox(
-                            size: 15,
-                            animationDuration:
-                                const Duration(milliseconds: 100),
-                            checkedWidget: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 12,
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 15),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 3),
+                              child: Transform.scale(
+                                scale: 0.8,
+                                child: Checkbox(
+                                  value: merges.contains(PositionMerge.variety),
+                                  onChanged: (bool? value) {
+                                    if (merges
+                                        .contains(PositionMerge.variety)) {
+                                      merges.removeWhere((element) =>
+                                          element == PositionMerge.variety);
+                                    } else {
+                                      merges.add(PositionMerge.variety);
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
                             ),
-                            checkedColor: const Color(0xcc4285F4),
-                            borderColor: type == EntrustType.finish
-                                ? const Color(0xcc4285F4)
-                                : Theme.of(context).disabledColor,
-                            isChecked: type == EntrustType.finish,
-                            onTap: (bool? value) {
-                              type = EntrustType.finish;
-                              setState(() {});
-                            },
-                          ),
+                            const Text('品种合并'),
+                          ],
                         ),
-                        const Text('成交'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 3),
-                          child: CircleCheckBox(
-                            size: 15,
-                            animationDuration:
-                                const Duration(milliseconds: 100),
-                            checkedWidget: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 12,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 3),
+                            child: Transform.scale(
+                              scale: 0.8,
+                              child: Checkbox(
+                                value: merges.contains(PositionMerge.contract),
+                                onChanged: (bool? value) {
+                                  if (merges.contains(PositionMerge.contract)) {
+                                    merges.removeWhere((element) =>
+                                        element == PositionMerge.contract);
+                                  } else {
+                                    merges.add(PositionMerge.contract);
+                                  }
+                                  setState(() {});
+                                },
+                              ),
                             ),
-                            checkedColor: const Color(0xcc4285F4),
-                            borderColor: type == EntrustType.delete
-                                ? const Color(0xcc4285F4)
-                                : Theme.of(context).disabledColor,
-                            isChecked: type == EntrustType.delete,
-                            onTap: (bool? value) {
-                              type = EntrustType.delete;
-                              setState(() {});
-                            },
                           ),
-                        ),
-                        const Text('已撤'),
-                      ],
-                    ),
+                          const Text('合约合并'),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -229,11 +174,10 @@ class _EntrustState extends State<EntrustPage> {
                 canDrag: true,
                 titleColor: Setting.tableBarColor,
                 height: 200,
-                rightMenuFunc: _rightMenuFunc,
                 columns: [
                   FormColumn<Entrust>(
                     title: const Text(
-                      '报价编号',
+                      '品种',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -274,7 +218,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '买卖',
+                      '多头持仓',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -294,7 +238,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '开平',
+                      '空头持仓',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -314,7 +258,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '挂单状态',
+                      '净持仓',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -334,7 +278,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '报单价格',
+                      '今日开仓',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -354,7 +298,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '报单手数',
+                      '开仓均价',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -374,7 +318,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '未成交数',
+                      '浮动盈亏',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -394,7 +338,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '成交手数',
+                      '盯市盈亏',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -414,7 +358,7 @@ class _EntrustState extends State<EntrustPage> {
                   ),
                   FormColumn<Entrust>(
                     title: const Text(
-                      '详细状态',
+                      '盈亏比例',
                       style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
@@ -455,43 +399,11 @@ class _EntrustState extends State<EntrustPage> {
                     child: Container(
                       margin: const EdgeInsets.only(left: 10, right: 10),
                       child: const Text(
-                        '改单',
+                        '平仓',
                         style: TextStyle(
                           color: Color(0xff333333),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all(Setting.backGroundColor)),
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10),
-                      child: const Text('撤单',
-                        style: TextStyle(
-                          color: Color(0xff333333),
-                        ),),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all(Setting.backGroundColor)),
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10),
-                      child: const Text('全撤',
-                        style: TextStyle(
-                          color: Color(0xff333333),
-                        ),),
                     ),
                   ),
                 ],
@@ -503,25 +415,6 @@ class _EntrustState extends State<EntrustPage> {
     );
   }
 
-  void getRandom() {
-    final Random ran = Random();
-    final int first = ran.nextInt(entrusts.length);
-    final int second = ran.nextInt(10);
-    final int third = ran.nextInt(1000);
-
-    Entrust entrust = entrusts.firstWhere(
-      (element) => element.id == first,
-    );
-    if (entrust != null) {
-      final entrustMap = entrust.toJson();
-      final key = entrustMap.keys.elementAt(second);
-      if (key != 'id') {
-        entrustMap.update(key, (value) => third.toString());
-        entrust = Entrust.fromJson(entrustMap);
-      }
-    }
-    entrusts.removeWhere((element) => element.id == first);
-    entrusts.insert(entrust.id!, entrust);
-    setState(() {});
-  }
+  @override
+  bool get wantKeepAlive => true;
 }
