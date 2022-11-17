@@ -23,6 +23,10 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
   MultiSplitViewTheme? theme;
   late MultiSplitViewController _controller;
 
+  late MultiSplitView multiSplitView2;
+  MultiSplitViewTheme? theme2;
+  late MultiSplitViewController _controller2;
+
   @override
   void initState() {
     super.initState();
@@ -32,13 +36,16 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
         Area(weight: 0.25, minimalWeight: 0.2),
         Area(weight: 0.6, minimalWeight: 0.4)
       ]);
+      _controller2 = MultiSplitViewController(areas: [
+        Area(weight: 0.35, minimalWeight: 0.2),
+        Area(weight: 0.65, minimalWeight: 0.57)
+      ]);
       multiSplitView = MultiSplitView(
         axis: Axis.horizontal,
         controller: _controller,
         children: [_diskPortWidget(), _orderWidget(), const _TabView()],
         onWeightChange: () {},
       );
-
       theme = MultiSplitViewTheme(
         data: MultiSplitViewThemeData(
             dividerThickness: 0.5,
@@ -47,29 +54,27 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                 highlightedColor: Colors.indigo[900]!)),
         child: multiSplitView,
       );
+      multiSplitView2 = MultiSplitView(
+        axis: Axis.vertical,
+        controller: _controller2,
+        children: [const QuotationPage(), _buildContainer()],
+        onWeightChange: () {},
+      );
+
+      theme2 = MultiSplitViewTheme(
+        data: MultiSplitViewThemeData(
+            dividerPainter: DividerPainters.grooved1(
+                color: Setting.backBorderColor,
+                highlightedColor: Colors.indigo[900]!)),
+        child: multiSplitView2,
+      );
       setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const QuotationPage(),
-        const HeadWidgetPage(),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Setting.bottomBorderColor),
-              ),
-            ),
-            child: theme,
-          ),
-        ),
-        const BottomWidgetPage(),
-      ],
-    );
+    return theme2 ?? Container();
   }
 
   Widget _buildContainer() {
@@ -84,27 +89,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                   bottom: BorderSide(color: Setting.bottomBorderColor),
                 ),
               ),
-              child: Row(
-                children: [
-                  _diskPortWidget(),
-                  SizedBox(
-                    width: 1,
-                    child: Container(
-                      color: Setting.bottomBorderColor,
-                    ),
-                  ),
-                  _orderWidget(),
-                  SizedBox(
-                    width: 1,
-                    child: Container(
-                      color: Setting.bottomBorderColor,
-                    ),
-                  ),
-                  const Expanded(
-                    child: _TabView(),
-                  ),
-                ],
-              ),
+              child: theme,
             ),
           ),
           const BottomWidgetPage(),

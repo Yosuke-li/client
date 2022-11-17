@@ -89,7 +89,7 @@ class CommonForm<T> extends StatefulWidget {
   final bool showExtra;
   final TapCallBack<T>? onTapFunc; //点击回调
   final DragCallBack<T>? onDragFunc; //拖拽后的回调
-  final double height;
+  final double? height;
   final Color? titleColor;
   final Color? formColor;
 
@@ -106,7 +106,7 @@ class CommonForm<T> extends StatefulWidget {
       this.titleColor,
       this.rightMenuFunc,
       this.formColor,
-      required this.height})
+      this.height})
       : super(key: key);
 
   @override
@@ -303,24 +303,36 @@ class _CommonFormState<T> extends State<CommonForm<T>> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               controller: hController,
-              child: Container(
-                height: widget.height,
-                child: Column(
-                  children: [
-                    buildTitleRow(snapshot.data as List<FormColumn<T>>),
-                    Expanded(
-                      child: Scrollbar(
-                        controller: vController,
-                        child: SingleChildScrollView(
-                          controller: vController,
-                          child: Column(
-                            children: children,
+              child: widget.height != null
+                  ? SizedBox(
+                      height: widget.height,
+                      child: Column(
+                        children: [
+                          buildTitleRow(snapshot.data as List<FormColumn<T>>),
+                          Expanded(
+                            child: Scrollbar(
+                              controller: vController,
+                              child: SingleChildScrollView(
+                                controller: vController,
+                                child: Column(
+                                  children: children,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
+                    )
+                  : Column(
+                children: [
+                  buildTitleRow(snapshot.data as List<FormColumn<T>>),
+                  Scrollbar(
+                    controller: vController,
+                    child: Column(
+                      children: children,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -335,8 +347,7 @@ class _CommonFormState<T> extends State<CommonForm<T>> {
       child: Row(
         children: widget.columns
             .map((e) => warpWidget(
-                child: e.extraBuilder ?? Container(),
-                width: e.width))
+                child: e.extraBuilder ?? Container(), width: e.width))
             .toList(growable: false),
       ),
     );

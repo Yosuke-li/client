@@ -9,7 +9,9 @@ import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/widget/management/widget/common_form.dart';
 
 class QuotationPage extends StatefulWidget {
-  const QuotationPage({Key? key}) : super(key: key);
+  final double? height;
+
+  const QuotationPage({Key? key, this.height}) : super(key: key);
 
   @override
   _QuotationState createState() => _QuotationState();
@@ -93,9 +95,7 @@ class _QuotationState extends State<QuotationPage> {
   }
 
   /// todo 点击将合约和现价发到下单页面
-  void _eventBus() {
-
-  }
+  void _eventBus() {}
 
   /// max height*0.6
   /// min height*0.04
@@ -104,67 +104,68 @@ class _QuotationState extends State<QuotationPage> {
     return RepaintBoundary(
       child: Container(
         alignment: Alignment.centerLeft,
-        child: Column(
+        child: ListView(
           children: [
             //拖拽
             Container(
               color: Setting.backGroundColor,
+              height: 28,
               child: Row(
                 children: [
                   Row(
                     children: groups
                         .map(
                           (e) => Draggable<String>(
-                        data: e,
-                        feedback: Container(
-                          width: 80,
-                          height: 28,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1.0, style: BorderStyle.solid),
-                          ),
-                          child: Text(
-                            e,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                              decoration: TextDecoration.none,
+                            data: e,
+                            feedback: Container(
+                              width: 80,
+                              height: 28,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1.0, style: BorderStyle.solid),
+                              ),
+                              child: Text(
+                                e,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.normal,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        child: DragTarget<String>(
-                          onAccept: (o) {
-                            int from = groups.indexOf(o);
-                            int to = groups.indexOf(e);
-                            final temp = groups[from];
-                            groups[from] = groups[to];
-                            groups[to] = temp;
-                            setState(() {});
-                          },
-                          builder: (context, _, __) {
-                            return InkWell(
-                              onTap: () {
-                                select_group = e;
+                            child: DragTarget<String>(
+                              onAccept: (o) {
+                                int from = groups.indexOf(o);
+                                int to = groups.indexOf(e);
+                                final temp = groups[from];
+                                groups[from] = groups[to];
+                                groups[to] = temp;
                                 setState(() {});
                               },
-                              child: Container(
-                                width: 80,
-                                height: 28,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: select_group == e
-                                      ? Setting.tabSelectColor
-                                      : null,
-                                ),
-                                child: Text(e, textAlign: TextAlign.center),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    )
+                              builder: (context, _, __) {
+                                return InkWell(
+                                  onTap: () {
+                                    select_group = e;
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    width: 80,
+                                    height: 28,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: select_group == e
+                                          ? Setting.tabSelectColor
+                                          : null,
+                                    ),
+                                    child: Text(e, textAlign: TextAlign.center),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        )
                         .toList(),
                   ),
                   InkWell(
@@ -180,7 +181,6 @@ class _QuotationState extends State<QuotationPage> {
               ),
             ),
             CommonForm<Account>(
-              height: MediaQuery.of(context).size.height * 0.35,
               canDrag: canDrag,
               onTapFunc: (Account value) {
                 Log.info(value.username!);
