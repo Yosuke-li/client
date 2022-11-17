@@ -3,8 +3,10 @@ import 'package:transaction_client/utils/screen.dart';
 
 class TextInputLock extends StatefulWidget {
   final FormFieldSetter<String> onSave;
+  double? height;
+  Decoration? decoration;
 
-  TextInputLock({required this.onSave});
+  TextInputLock({required this.onSave, this.height, this.decoration});
 
   @override
   _TextInputLockState createState() => _TextInputLockState();
@@ -21,12 +23,34 @@ class _TextInputLockState extends State<TextInputLock> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: widget.height ?? 30,
+      decoration: widget.decoration ?? BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(
+          color: const Color(0xff797979),
+          width: 1.0,
+          style: BorderStyle.solid,
+        ),
+      ),
       child: Row(
         children: [
           Expanded(
             child: TextFormField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
+              decoration: const InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0x00ffffff),
+                    width: 0.0,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0x00ffffff),
+                    width: 0.0,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 0, horizontal: 6),
               ),
               readOnly: onLock,
               onSaved: widget.onSave,
@@ -42,7 +66,6 @@ class _TextInputLockState extends State<TextInputLock> {
               },
               child: Icon(
                 onLock ? Icons.lock : Icons.lock_open,
-                color: Color(0xBFffffff),
                 size: 15,
               ),
             ),

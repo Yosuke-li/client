@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/page/transaction/order/order_modal.dart';
 import 'package:transaction_client/utils/screen.dart';
+import 'package:transaction_client/widget/common_input/text_input_lock.dart';
 import 'package:transaction_client/widget/common_input/text_input_number.dart';
 import 'package:transaction_client/widget/drop_menu/overlay_field.dart';
 import 'package:transaction_client/widget/search_field.dart';
@@ -109,61 +110,67 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  children: [
-                                    const Text(
+                                  children: const [
+                                    Text(
                                       '合约',
                                       style: TextStyle(),
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        Order.Modal(context);
-                                      },
-                                      child: const Icon(
-                                        Icons.search,
-                                        size: 18,
-                                      ),
-                                    ),
                                   ],
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    state.readOnly.value =
-                                        !state.readOnly.value;
-                                  },
-                                  child: Icon(
-                                    state.readOnly.value
-                                        ? Icons.lock
-                                        : Icons.lock_open,
-                                    size: 18,
-                                  ),
-                                )
                               ],
                             ),
                           ),
                           Container(
-                            child: SearchField(
-                              suggestions: _suggestions,
-                              controller: _searchController,
-                              readOnly: state.readOnly.value,
-                              hint: '选择合约',
-                              searchAlignVertical: TextAlignVertical.bottom,
-                              searchStyle: const TextStyle(fontSize: 14),
-                              initialValue: _suggestions[2],
-                              searchInputDecoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black.withOpacity(0.8),
+                            height: 30,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(3),
+                              border: Border.all(
+                                color: const Color(0xff797979),
+                                width: 1.0,
+                                style: BorderStyle.solid,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00ffffff),
+                                          width: 0.0,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00ffffff),
+                                          width: 0.0,
+                                        ),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0, horizontal: 6),
+                                    ),
+                                    readOnly: state.readOnly.value,
+                                    onSaved: (String? val) {
+
+                                    },
                                   ),
                                 ),
-                                border: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.red),
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.only(right: screenUtil.adaptive(5)),
+                                  child: InkWell(
+                                    onTap: () {
+                                      state.readOnly.value = !state.readOnly.value;
+                                      setState(() {});
+                                    },
+                                    child: Icon(
+                                      state.readOnly.value ? Icons.lock : Icons.lock_open,
+                                      size: 15,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              maxSuggestionsInViewPort: 4,
-                              itemHeight: 30,
-                              onTap: (x) {
-                                print('selected =$x ${_searchController.text}');
-                              },
+                              ],
                             ),
                           ),
                         ],

@@ -39,6 +39,14 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
       DiskPortDetail()
         ..code = '146190'
         ..name = '卖五'
+        ..value = '2',
+      DiskPortDetail()
+        ..code = '146190'
+        ..name = '卖五'
+        ..value = '2',
+      DiskPortDetail()
+        ..code = '146190'
+        ..name = '卖五'
         ..value = '4',
       DiskPortDetail()
         ..code = '146190'
@@ -72,29 +80,30 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
         child: Container(
           alignment: Alignment.center,
           child: widget.type == DiskPortType.TypeOne ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: disk.map((e) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                        right: screenUtil.adaptive(15),
-                        left: screenUtil.adaptive(15)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('${e.name}'),
-                        Text(
-                          '${e.code}',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        Text('${e.value}'),
-                      ],
-                    ),
-                  );
-                }).toList(),
+              Expanded(
+                flex: 3,
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: disk.map((e) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                          right: screenUtil.adaptive(15),
+                          left: screenUtil.adaptive(15)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${e.name}'),
+                          Text(
+                            '${e.code}',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          Text('${e.value}'),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               Container(
                 margin: EdgeInsets.only(
@@ -104,27 +113,29 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                 height: 0.5,
                 color: Setting.backBorderColor,
               ),
-              ListView(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: disk.map((e) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                        right: screenUtil.adaptive(15),
-                        left: screenUtil.adaptive(15)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('${e.name}'),
-                        Text(
-                          '${e.code}',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        Text('${e.value}'),
-                      ],
-                    ),
-                  );
-                }).toList(),
+              Expanded(
+                flex: 3,
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: disk.map((e) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                          right: screenUtil.adaptive(15),
+                          left: screenUtil.adaptive(15)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${e.name}'),
+                          Text(
+                            '${e.code}',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          Text('${e.value}'),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               Container(
                 margin: EdgeInsets.only(

@@ -44,11 +44,9 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
       key: widget.key,
       focusNode: widget.focusNode,
       onKey: (key) {
-        Log.info(key);
-        Log.info(widget.key??'');
-        if (key.logicalKey.debugName == 'Arrow Up') {
+        if (key.character != null && key.logicalKey.keyLabel == 'Arrow Up') {
           widget.rulesFunc.upRule.call(controller);
-        } else if (key.logicalKey.debugName == 'Arrow Down') {
+        } else if (key.character != null && key.logicalKey.keyLabel == 'Arrow Down') {
           widget.rulesFunc.downRule.call(controller);
         }
       },
@@ -105,18 +103,18 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
                     onTap: () {
                       widget.rulesFunc.upRule.call(controller);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_arrow_up,
-                      size: screenUtil.adaptive(12),
+                      size: 12,
                     ),
                   ),
                   InkWell(
                     onTap: () {
                       widget.rulesFunc.downRule.call(controller);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_arrow_down,
-                      size: screenUtil.adaptive(12),
+                      size: 12,
                     ),
                   ),
                 ],
