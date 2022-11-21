@@ -5,6 +5,7 @@ import 'package:transaction_client/model/home_tab.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';
 import 'package:transaction_client/page/transaction/common/bottom_widget.dart';
 import 'package:transaction_client/page/transaction/quotation/quotation.dart';
+import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/utils/screen.dart';
 
 import '../entrustment/entrustment.dart';
@@ -27,10 +28,13 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
   MultiSplitViewTheme? theme2;
   late MultiSplitViewController _controller2;
 
+  double? height;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      height = MediaQuery.of(context).size.height * 0.3;
       _controller = MultiSplitViewController(areas: [
         Area(weight: 0.15, minimalWeight: 0.15),
         Area(weight: 0.25, minimalWeight: 0.2),
@@ -245,7 +249,8 @@ class _TabViewState extends State<_TabView> with TickerProviderStateMixin {
                     ),
                     alignment: Alignment.center,
                     height: 30,
-                    color: currentIndex == index ? Setting.tabSelectColor : null,
+                    color:
+                        currentIndex == index ? Setting.tabSelectColor : null,
                     child: Text(
                       e.name,
                     ),

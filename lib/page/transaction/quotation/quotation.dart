@@ -31,6 +31,24 @@ class _QuotationState extends State<QuotationPage> {
     Account()
       ..username = '5'
       ..password = '564',
+    Account()
+      ..username = '5'
+      ..password = '564',
+    Account()
+      ..username = '5'
+      ..password = '564',
+    Account()
+      ..username = '5'
+      ..password = '564',
+    Account()
+      ..username = '5'
+      ..password = '564',
+    Account()
+      ..username = '5'
+      ..password = '564',
+    Account()
+      ..username = '5'
+      ..password = '564',
   ];
 
   List<String> groups = ['123', '456'];
@@ -42,6 +60,15 @@ class _QuotationState extends State<QuotationPage> {
   void initState() {
     _init(); // late要在初始化之前
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant QuotationPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    Log.info('QuotationPage: ${widget.height ?? 0}');
+    if (widget.height != oldWidget.height) {
+      setState(() {});
+    }
   }
 
   //右键菜单栏

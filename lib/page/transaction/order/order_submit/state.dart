@@ -7,37 +7,37 @@ class OrderSubmitState {
 
   late RxBool isShowBar;
 
-  late RxInt side;
-  late RxInt tif;
-  late RxInt ordType;
-  late RxInt openFlag;
-  late RxInt hedgeFlag;
+  late RxString side;
+  late RxString tif;
+  late RxString orderType;
+  late RxString positionType;
+  late RxString insuredType;
 
   late RxBool readOnly;
 
-  late List<int> sides;
-  late List<int> tifs;
-  late List<int> ordTypes;
-  late List<int> openFlags;
-  late List<int> hedgeFlags;
+  late List<String> sides;
+  late List<String> tifs;
+  late List<String> orderTypes;
+  late List<String> positionTypes;
+  late List<String> insuredTypes;
 
   late FocusNode focusNode;
 
   OrderSubmitState() {
     formKey = GlobalKey<FormState>();
     // create = OrderSubmit();
-    sides = <int>[];
-    tifs = <int>[];
-    ordTypes = <int>[];
-    openFlags = <int>[];
-    hedgeFlags = <int>[];
+    sides = <String>[];
+    tifs = <String>[];
+    orderTypes = <String>[];
+    positionTypes = <String>[];
+    insuredTypes = <String>[];
     isShowBar = true.obs;
     readOnly = false.obs;
-    side = 0.obs;
-    tif = 0.obs;
-    ordType = 0.obs;
-    openFlag = 0.obs;
-    hedgeFlag = 0.obs;
+    side = ''.obs;
+    tif = ''.obs;
+    orderType = ''.obs;
+    insuredType = ''.obs;
+    positionType = ''.obs;
     focusNode = FocusNode();
   }
 }

@@ -28,6 +28,8 @@ class _AddGroupsPageState extends State<AddGroupsPage> {
             height: 40,
             child: TextFormField(
               decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0, horizontal: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5.0),
                   borderSide: BorderSide(

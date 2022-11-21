@@ -150,12 +150,14 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                       contentPadding: EdgeInsets.symmetric(
                                           vertical: 0, horizontal: 6),
                                     ),
-                                    readOnly: state.readOnly.value,
+                                    /// todo 填合约编码 合约编码用中台得设置都能找到交易所,暂时没中台就先不能手动吧
+                                    readOnly: true,
                                     onSaved: (String? val) {
 
                                     },
                                   ),
                                 ),
+                                /// todo 锁住就不能点击替换合约内容了
                                 Container(
                                   alignment: Alignment.center,
                                   margin: EdgeInsets.only(right: screenUtil.adaptive(5)),
@@ -301,21 +303,21 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                              () => OverlayField<int>(
+                              () => OverlayField<String>(
                                 key: const Key('Side'),
                                 maxHeight: 60,
-                                initValue: '${state.side.value}',
+                                initValue: state.side.value,
                                 lists: state.sides,
                                 textStyle: const TextStyle(fontSize: 14),
-                                onChange: (int e) {
+                                onChange: (String e) {
                                   state.side.value = e;
                                 },
-                                child: (int e) {
+                                child: (String e) {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
                                     margin: const EdgeInsets.all(4),
-                                    child: Text('$e'),
+                                    child: Text(e),
                                   );
                                 },
                               ),
@@ -328,7 +330,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   left: 30,
                   right: 30,
                 ),
@@ -352,21 +354,21 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                              () => OverlayField<int>(
-                                key: const Key('OpenFlag'),
-                                maxHeight: 100,
-                                initValue: '${state.openFlag.value}',
-                                lists: state.openFlags,
+                              () => OverlayField<String>(
+                                key: Key(state.positionType.hashCode.toString()),
+                                maxHeight: 85,
+                                initValue: state.positionType.value,
+                                lists: state.positionTypes,
                                 textStyle: const TextStyle(fontSize: 14),
-                                onChange: (int e) {
-                                  state.openFlag.value = e;
+                                onChange: (String e) {
+                                  state.positionType.value = e;
                                 },
-                                child: (int e) {
+                                child: (String e) {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin: const EdgeInsets.only(left: 4),
-                                    child: Text('$e'),
+                                    margin: const EdgeInsets.all(4),
+                                    child: Text(e),
                                   );
                                 },
                               ),
@@ -393,21 +395,21 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                              () => OverlayField<int>(
-                                key: const Key('HedgeFlag'),
-                                maxHeight: 100,
-                                initValue: '${state.hedgeFlag.value}',
-                                lists: state.hedgeFlags,
+                              () => OverlayField<String>(
+                                key: Key(state.insuredType.hashCode.toString()),
+                                maxHeight: 85,
+                                initValue: state.insuredType.value,
+                                lists: state.insuredTypes,
                                 textStyle: const TextStyle(fontSize: 14),
-                                onChange: (int e) {
-                                  state.hedgeFlag.value = e;
+                                onChange: (String e) {
+                                  state.insuredType.value = e;
                                 },
-                                child: (int e) {
+                                child: (String e) {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin: const EdgeInsets.only(left: 4),
-                                    child: Text('$e'),
+                                    margin: const EdgeInsets.all(4),
+                                    child: Text(e),
                                   );
                                 },
                               ),
@@ -444,19 +446,20 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.centerLeft,
                             child: Obx(
-                              () => OverlayField<int>(
-                                key: const Key('OrdType'),
-                                initValue: '${state.ordType.value}',
-                                lists: state.ordTypes,
+                              () => OverlayField<String>(
+                                key: Key(state.orderTypes.hashCode.toString()),
+                                initValue: state.orderType.value,
+                                lists: state.orderTypes,
+                                maxHeight: 85,
                                 textStyle: const TextStyle(fontSize: 14),
-                                onChange: (int e) {
-                                  state.ordType.value = e;
+                                onChange: (String e) {
+                                  state.orderType.value = e;
                                 },
-                                child: (int e) {
+                                child: (String e) {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin: const EdgeInsets.only(left: 4),
+                                    margin: const EdgeInsets.all(4),
                                     child: Text('$e'),
                                   );
                                 },
@@ -484,21 +487,21 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             height: 30,
                             alignment: Alignment.center,
                             child: Obx(
-                              () => OverlayField<int>(
-                                key: const Key('Tif'),
-                                maxHeight: 100,
-                                initValue: '${state.tif.value}',
+                              () => OverlayField<String>(
+                                key: Key(state.tifs.hashCode.toString()),
+                                maxHeight: 85,
+                                initValue: state.tif.value,
                                 lists: state.tifs,
                                 textStyle: const TextStyle(fontSize: 14),
-                                onChange: (int e) {
+                                onChange: (String e) {
                                   state.tif.value = e;
                                 },
-                                child: (int e) {
+                                child: (String e) {
                                   return Container(
                                     height: 20,
                                     alignment: Alignment.centerLeft,
-                                    margin: const EdgeInsets.only(left: 4),
-                                    child: Text('$e'),
+                                    margin: const EdgeInsets.all(4),
+                                    child: Text(e),
                                   );
                                 },
                               ),

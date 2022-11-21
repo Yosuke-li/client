@@ -27,6 +27,7 @@ class DiskPortDetail {
 
 class _DiskPortDetailState extends State<DiskPortDetailPage> {
   List<DiskPortDetail> disk = [];
+  ScrollController controller = ScrollController();
 
   @override
   void initState() {
@@ -85,6 +86,7 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                 flex: 3,
                 child: ListView(
                   physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
                   children: disk.map((e) {
                     return Container(
                       margin: EdgeInsets.only(

@@ -297,14 +297,14 @@ class _CommonFormState<T> extends State<CommonForm<T>> {
       stream: controller.stream,
       initialData: columns,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RepaintBoundary(
-          child: Scrollbar(
-            controller: hController,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              controller: hController,
-              child: widget.height != null
-                  ? SizedBox(
+        return widget.height != null
+            ? RepaintBoundary(
+                child: Scrollbar(
+                  controller: hController,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: hController,
+                    child: SizedBox(
                       height: widget.height,
                       child: Column(
                         children: [
@@ -322,21 +322,33 @@ class _CommonFormState<T> extends State<CommonForm<T>> {
                           ),
                         ],
                       ),
-                    )
-                  : Column(
-                children: [
-                  buildTitleRow(snapshot.data as List<FormColumn<T>>),
-                  Scrollbar(
-                    controller: vController,
-                    child: Column(
-                      children: children,
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        );
+                ),
+              )
+            : RepaintBoundary(
+                child: Scrollbar(
+                  controller: hController,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: hController,
+                    child: Column(
+                      children: [
+                        buildTitleRow(snapshot.data as List<FormColumn<T>>),
+                        Scrollbar(
+                          controller: vController,
+                          child: SingleChildScrollView(
+                            controller: vController,
+                            child: Column(
+                              children: children,
+                            ),
+                          )
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
       },
     );
   }
