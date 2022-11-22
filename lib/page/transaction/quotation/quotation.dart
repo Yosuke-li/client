@@ -2,11 +2,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:native_context_menu/native_context_menu.dart' as native;
+import 'package:transaction_client/global/global.dart';
+import 'package:transaction_client/global/order_json.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/model/account.dart';
 import 'package:transaction_client/page/transaction/quotation/setting.dart';
+import 'package:transaction_client/utils/event_bus_helper.dart';
 import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/widget/management/widget/common_form.dart';
+import 'package:transaction_client/widget/toast_utils.dart';
 
 class QuotationPage extends StatefulWidget {
   final double? height;
@@ -20,39 +24,16 @@ class QuotationPage extends StatefulWidget {
 class _QuotationState extends State<QuotationPage> {
   List<Account> users = [
     Account()
-      ..username = '1'
-      ..password = '564',
+      ..username = 'CU202203'
+      ..password = 'DCE',
     Account()
-      ..username = '2'
-      ..password = '564',
+      ..username = 'ZH202203'
+      ..password = 'CZCE',
     Account()
-      ..username = '3'
-      ..password = '4',
-    Account()
-      ..username = '5'
-      ..password = '564',
-    Account()
-      ..username = '5'
-      ..password = '564',
-    Account()
-      ..username = '5'
-      ..password = '564',
-    Account()
-      ..username = '5'
-      ..password = '564',
-    Account()
-      ..username = '5'
-      ..password = '564',
-    Account()
-      ..username = '5'
-      ..password = '564',
-    Account()
-      ..username = '5'
-      ..password = '564',
+      ..username = 'ZH202206'
+      ..password = 'INE',
   ];
 
-  List<String> groups = ['123', '456'];
-  String select_group = '123';
   late RightMenuFunc _rightMenuFunc;
   bool canDrag = true;
 
@@ -65,7 +46,6 @@ class _QuotationState extends State<QuotationPage> {
   @override
   void didUpdateWidget(covariant QuotationPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    Log.info('QuotationPage: ${widget.height ?? 0}');
     if (widget.height != oldWidget.height) {
       setState(() {});
     }
@@ -93,36 +73,13 @@ class _QuotationState extends State<QuotationPage> {
     setState(() {});
   }
 
-  void _onSetTapUp(TapUpDetails e) async {
-    final position = Offset(
-      e.globalPosition.dx + Offset.zero.dx,
-      e.globalPosition.dy + Offset.zero.dy,
-    );
-
-    final selectedItem = await native.showContextMenu(
-      native.ShowMenuArgs(
-        MediaQuery.of(context).devicePixelRatio,
-        position,
-        [
-          native.MenuItem(title: '添加合约'),
-          native.MenuItem(
-            title: '标记排序',
-            onSelected: () {
-              canDrag = !canDrag;
-              setState(() {});
-            },
-          ),
-        ],
-      ),
-    );
-
-    if (selectedItem != null) {
-      selectedItem.onSelected?.call();
+  void _eventBus(dynamic value) {
+    if (Global.lock != true) {
+      EventBusHelper.asyncStreamController?.add(EventSelect()..value = value);
+    } else {
+      ToastUtils.showToast(msg: '合约已锁定，需要修改请点击合约锁图标解锁');
     }
   }
-
-  /// todo 点击将合约和现价发到下单页面
-  void _eventBus() {}
 
   /// max height*0.6
   /// min height*0.04
@@ -134,83 +91,11 @@ class _QuotationState extends State<QuotationPage> {
         child: ListView(
           children: [
             //拖拽
-            Container(
-              color: Setting.backGroundColor,
-              height: 28,
-              child: Row(
-                children: [
-                  Row(
-                    children: groups
-                        .map(
-                          (e) => Draggable<String>(
-                            data: e,
-                            feedback: Container(
-                              width: 80,
-                              height: 28,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1.0, style: BorderStyle.solid),
-                              ),
-                              child: Text(
-                                e,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.normal,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                            ),
-                            child: DragTarget<String>(
-                              onAccept: (o) {
-                                int from = groups.indexOf(o);
-                                int to = groups.indexOf(e);
-                                final temp = groups[from];
-                                groups[from] = groups[to];
-                                groups[to] = temp;
-                                setState(() {});
-                              },
-                              builder: (context, _, __) {
-                                return InkWell(
-                                  onTap: () {
-                                    select_group = e;
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    width: 80,
-                                    height: 28,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: select_group == e
-                                          ? Setting.tabSelectColor
-                                          : null,
-                                    ),
-                                    child: Text(e, textAlign: TextAlign.center),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      QuoSetting.addGroups(context);
-                    },
-                    child: const Icon(
-                      Icons.add,
-                      size: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const _TopGroups(),
             CommonForm<Account>(
               canDrag: canDrag,
               onTapFunc: (Account value) {
-                Log.info(value.username!);
+                _eventBus(value);
               },
               showExtra: true,
               rightMenuFunc: _rightMenuFunc,
@@ -253,7 +138,7 @@ class _QuotationState extends State<QuotationPage> {
                 ),
                 FormColumn<Account>(
                   title: const Text(
-                    '合约',
+                    '品种',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.none,
@@ -274,7 +159,7 @@ class _QuotationState extends State<QuotationPage> {
                 ),
                 FormColumn<Account>(
                   title: const Text(
-                    '合约名',
+                    '合约编码',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.none,
@@ -295,7 +180,7 @@ class _QuotationState extends State<QuotationPage> {
                 ),
                 FormColumn<Account>(
                   title: const Text(
-                    '最新价',
+                    '现价',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.none,
@@ -398,186 +283,6 @@ class _QuotationState extends State<QuotationPage> {
                 ),
                 FormColumn<Account>(
                   title: const Text(
-                    '买量',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '卖量',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '成交量',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '持仓量',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '现量',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '涨停价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '涨跌价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '今开盘',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '昨收盘',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
                     '最高价',
                     style: TextStyle(
                       fontSize: 13,
@@ -618,7 +323,67 @@ class _QuotationState extends State<QuotationPage> {
                 ),
                 FormColumn<Account>(
                   title: const Text(
-                    '成交额',
+                    '振幅',
+                    style: TextStyle(
+                      fontSize: 13,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  builder: (_, v) => Container(
+                    child: Text(
+                      '${v.password ?? ''}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+                FormColumn<Account>(
+                  title: const Text(
+                    '开盘价',
+                    style: TextStyle(
+                      fontSize: 13,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  builder: (_, v) => Container(
+                    child: Text(
+                      '${v.password ?? ''}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+                FormColumn<Account>(
+                  title: const Text(
+                    '昨日收盘价',
+                    style: TextStyle(
+                      fontSize: 13,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  builder: (_, v) => Container(
+                    child: Text(
+                      '${v.password ?? ''}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+                FormColumn<Account>(
+                  title: const Text(
+                    '昨日结算价',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.none,
@@ -681,6 +446,145 @@ class _QuotationState extends State<QuotationPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TopGroups extends StatefulWidget {
+  const _TopGroups({Key? key}) : super(key: key);
+
+  @override
+  State<_TopGroups> createState() => _TopGroupsState();
+}
+
+class _TopGroupsState extends State<_TopGroups> {
+  List<String> groups = ['123', '456'];
+  String selectGroup = '123';
+
+  bool shouldReact = false;
+  late RightMenuFunc _rightMenuFunc;
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
+  void _init() {
+    _rightMenuFunc = RightMenuFunc()
+      ..onItemSelected = (native.MenuItem item, int index) {
+        Log.info('index: $index');
+        item.onSelected?.call();
+      }
+      ..menuItems = [
+        native.MenuItem(title: '重命名', onSelected: () {}),
+        native.MenuItem(title: '删除', onSelected: () {}),
+      ];
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Setting.backGroundColor,
+      height: 28,
+      child: Row(
+        children: [
+          Row(
+            children: groups
+                .map(
+                  (e) => Draggable<String>(
+                    data: e,
+                    feedback: Container(
+                      width: 80,
+                      height: 28,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 1.0, style: BorderStyle.solid),
+                      ),
+                      child: Text(
+                        e,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.normal,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    child: DragTarget<String>(
+                      onAccept: (o) {
+                        int from = groups.indexOf(o);
+                        int to = groups.indexOf(e);
+                        final temp = groups[from];
+                        groups[from] = groups[to];
+                        groups[to] = temp;
+                        setState(() {});
+                      },
+                      builder: (context, _, __) {
+                        return Listener(
+                          onPointerDown: (e) {
+                            shouldReact = e.kind == PointerDeviceKind.mouse &&
+                                e.buttons == kSecondaryMouseButton;
+                          },
+                          onPointerUp: (e) async {
+                            if (!shouldReact) return;
+                            shouldReact = false;
+
+                            final position = Offset(
+                              e.position.dx + Offset.zero.dx,
+                              e.position.dy + Offset.zero.dy,
+                            );
+
+                            final selectedItem = await native.showContextMenu(
+                              native.ShowMenuArgs(
+                                MediaQuery.of(context).devicePixelRatio,
+                                position,
+                                _rightMenuFunc.menuItems ?? [],
+                              ),
+                            );
+
+                            if (selectedItem != null) {
+                              _rightMenuFunc.onItemSelected
+                                  ?.call(selectedItem, 0);
+                            }
+                          },
+                          child: InkWell(
+                            onTap: () {
+                              selectGroup = e;
+                              setState(() {});
+                            },
+                            child: Container(
+                              width: 80,
+                              height: 28,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: selectGroup == e
+                                    ? Setting.tabSelectColor
+                                    : null,
+                              ),
+                              child: Text(e, textAlign: TextAlign.center),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+          InkWell(
+            onTap: () {
+              QuoSetting.addGroups(context);
+            },
+            child: const Icon(
+              Icons.add,
+              size: 18,
+            ),
+          ),
+        ],
       ),
     );
   }

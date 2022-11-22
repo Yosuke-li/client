@@ -1,5 +1,10 @@
 import 'package:transaction_client/model/order_risk_control.dart';
 
+class EventSelect {
+  dynamic value;
+  bool canSelect = false;
+}
+
 class OrderJson {
   /// 大连:DCE 郑州:CZCE 上海:SHFE 上海能源:INE 中金:CFFE
   /// TIF: DAY当天有效，FOK全部成交，FAK立即成交和撤销

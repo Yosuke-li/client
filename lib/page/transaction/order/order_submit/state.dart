@@ -7,32 +7,35 @@ class OrderSubmitState {
 
   late RxBool isShowBar;
 
+  late TextEditingController controller;
+  late TextEditingController hands;
+  late RxDouble price;
   late RxString side;
   late RxString tif;
   late RxString orderType;
   late RxString positionType;
   late RxString insuredType;
 
-  late RxBool readOnly;
-
-  late List<String> sides;
-  late List<String> tifs;
-  late List<String> orderTypes;
-  late List<String> positionTypes;
-  late List<String> insuredTypes;
+  late RxList<String> sides;
+  late RxList<String> tifs;
+  late RxList<String> orderTypes;
+  late RxList<String> positionTypes;
+  late RxList<String> insuredTypes;
 
   late FocusNode focusNode;
 
   OrderSubmitState() {
     formKey = GlobalKey<FormState>();
     // create = OrderSubmit();
-    sides = <String>[];
-    tifs = <String>[];
-    orderTypes = <String>[];
-    positionTypes = <String>[];
-    insuredTypes = <String>[];
+    controller = TextEditingController();
+    hands = TextEditingController();
+    price = (0.0).obs;
+    sides = <String>[].obs;
+    tifs = <String>[].obs;
+    orderTypes = <String>[].obs;
+    positionTypes = <String>[].obs;
+    insuredTypes = <String>[].obs;
     isShowBar = true.obs;
-    readOnly = false.obs;
     side = ''.obs;
     tif = ''.obs;
     orderType = ''.obs;

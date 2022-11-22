@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
+import 'package:transaction_client/global/global.dart';
+import 'package:transaction_client/global/order_json.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/model/home_tab.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';
 import 'package:transaction_client/page/transaction/common/bottom_widget.dart';
 import 'package:transaction_client/page/transaction/quotation/quotation.dart';
+import 'package:transaction_client/utils/event_bus_helper.dart';
 import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/utils/screen.dart';
 
@@ -47,7 +52,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
       multiSplitView = MultiSplitView(
         axis: Axis.horizontal,
         controller: _controller,
-        children: [_diskPortWidget(), _orderWidget(), const _TabView()],
+        children: [const _DiskPortWidget(), _orderWidget(), const _TabView()],
         onWeightChange: () {},
       );
       theme = MultiSplitViewTheme(
@@ -102,50 +107,6 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
     );
   }
 
-  Widget _diskPortWidget() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.15,
-      child: Column(
-        children: [
-          Container(
-            alignment: Alignment.topLeft,
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Setting.bottomBorderColor),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    right: screenUtil.adaptive(10),
-                    left: screenUtil.adaptive(8),
-                    top: screenUtil.adaptive(5),
-                    bottom: screenUtil.adaptive(5),
-                  ),
-                  alignment: Alignment.center,
-                  height: 30,
-                  child: const Text(
-                    '盘口信息[合约]',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: RepaintBoundary(
-              child: DiskPortDetailPage(
-                type: DiskPortType.TypeOne,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _orderWidget() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.25,
@@ -187,6 +148,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
   }
 }
 
+/// 订单信息
 class _TabView extends StatefulWidget {
   const _TabView({Key? key}) : super(key: key);
 
@@ -273,3 +235,76 @@ class _TabViewState extends State<_TabView> with TickerProviderStateMixin {
     );
   }
 }
+
+/// 盘口信息
+class _DiskPortWidget extends StatefulWidget {
+  const _DiskPortWidget({Key? key}) : super(key: key);
+
+  @override
+  State<_DiskPortWidget> createState() => _DiskPortWidgetState();
+}
+
+class _DiskPortWidgetState extends State<_DiskPortWidget> {
+  dynamic _select;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventBusListen();
+  }
+
+  void _eventBusListen() {
+    EventBusHelper.listen<EventSelect>((event) {
+      if (event.value != null && Global.lock != true) {
+        _select = event.value;
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.15,
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Setting.bottomBorderColor),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    right: screenUtil.adaptive(10),
+                    left: screenUtil.adaptive(8),
+                    top: screenUtil.adaptive(5),
+                    bottom: screenUtil.adaptive(5),
+                  ),
+                  alignment: Alignment.center,
+                  height: 30,
+                  child: Text(
+                    '盘口信息[${_select?.username ?? ''}]',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: RepaintBoundary(
+              child: DiskPortDetailPage(
+                type: DiskPortType.TypeOne,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

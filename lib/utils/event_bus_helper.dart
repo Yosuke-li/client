@@ -3,7 +3,7 @@ import 'dart:async';
 //eventBus封装
 class EventBusHelper {
   //ignore:close_sinks
-  static final StreamController<void>? asyncStreamController =
+  static final StreamController<dynamic>? asyncStreamController =
   _GetAsyncStreamController.getInstance();
 
   static StreamSubscription<void> listen<T>(void Function(T event) onData,

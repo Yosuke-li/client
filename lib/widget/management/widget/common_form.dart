@@ -247,7 +247,7 @@ class _CommonFormState<T> extends State<CommonForm<T>> {
       child: Container(
         decoration: BoxDecoration(color: color),
         child: GestureDetector(
-          onTap: () {
+          onTapDown: (_) {
             widget.onTapFunc?.call(value);
           },
           child: Row(

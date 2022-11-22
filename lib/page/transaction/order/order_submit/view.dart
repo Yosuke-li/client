@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:transaction_client/global/global.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/page/transaction/order/order_modal.dart';
 import 'package:transaction_client/utils/screen.dart';
@@ -91,7 +92,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   left: 30,
                   right: 30,
                 ),
@@ -134,6 +135,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    controller: state.controller,
                                     decoration: const InputDecoration(
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -150,24 +152,26 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                       contentPadding: EdgeInsets.symmetric(
                                           vertical: 0, horizontal: 6),
                                     ),
+
                                     /// todo 填合约编码 合约编码用中台得设置都能找到交易所,暂时没中台就先不能手动吧
                                     readOnly: true,
-                                    onSaved: (String? val) {
-
-                                    },
+                                    onSaved: (String? val) {},
                                   ),
                                 ),
                                 /// todo 锁住就不能点击替换合约内容了
                                 Container(
                                   alignment: Alignment.center,
-                                  margin: EdgeInsets.only(right: screenUtil.adaptive(5)),
+                                  margin: EdgeInsets.only(
+                                      right: screenUtil.adaptive(5)),
                                   child: InkWell(
                                     onTap: () {
-                                      state.readOnly.value = !state.readOnly.value;
+                                      Global.lock = !Global.lock;
                                       setState(() {});
                                     },
                                     child: Icon(
-                                      state.readOnly.value ? Icons.lock : Icons.lock_open,
+                                      Global.lock
+                                          ? Icons.lock
+                                          : Icons.lock_open,
                                       size: 15,
                                     ),
                                   ),
@@ -203,6 +207,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                               ),
                             ),
                             child: TextFormField(
+                              controller: state.hands,
                               cursorHeight: 18,
                               decoration: const InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -221,9 +226,12 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                                     vertical: 0, horizontal: 6),
                               ),
                               inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9]')),
                               ],
-                              onSaved: (value) {},
+                              onSaved: (value) {
+
+                              },
                             ),
                           ),
                         ],
@@ -355,7 +363,8 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             alignment: Alignment.centerLeft,
                             child: Obx(
                               () => OverlayField<String>(
-                                key: Key(state.positionType.hashCode.toString()),
+                                key: Key(
+                                    state.positionTypes.hashCode.toString()),
                                 maxHeight: 85,
                                 initValue: state.positionType.value,
                                 lists: state.positionTypes,
@@ -396,7 +405,8 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                             alignment: Alignment.centerLeft,
                             child: Obx(
                               () => OverlayField<String>(
-                                key: Key(state.insuredType.hashCode.toString()),
+                                key:
+                                    Key(state.insuredTypes.hashCode.toString()),
                                 maxHeight: 85,
                                 initValue: state.insuredType.value,
                                 lists: state.insuredTypes,
