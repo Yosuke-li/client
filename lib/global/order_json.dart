@@ -2,7 +2,7 @@ import 'package:transaction_client/model/order_risk_control.dart';
 
 class EventSelect {
   dynamic value;
-  bool canSelect = false;
+  dynamic price;
 }
 
 class OrderJson {

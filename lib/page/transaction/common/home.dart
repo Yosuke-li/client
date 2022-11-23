@@ -57,7 +57,7 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
       );
       theme = MultiSplitViewTheme(
         data: MultiSplitViewThemeData(
-            dividerThickness: 0.5,
+            dividerThickness: 1,
             dividerPainter: DividerPainters.background(
                 color: Setting.backBorderColor,
                 highlightedColor: Colors.indigo[900]!)),
@@ -87,23 +87,21 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
   }
 
   Widget _buildContainer() {
-    return Container(
-      child: Column(
-        children: [
-          const HeadWidgetPage(),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Setting.bottomBorderColor),
-                ),
+    return Column(
+      children: [
+        const HeadWidgetPage(),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Setting.bottomBorderColor),
               ),
-              child: theme,
             ),
+            child: theme,
           ),
-          const BottomWidgetPage(),
-        ],
-      ),
+        ),
+        const BottomWidgetPage(),
+      ],
     );
   }
 
@@ -246,6 +244,7 @@ class _DiskPortWidget extends StatefulWidget {
 
 class _DiskPortWidgetState extends State<_DiskPortWidget> {
   dynamic _select;
+  DiskPortType type = DiskPortType.TypeOne;
 
   @override
   void initState() {
@@ -270,6 +269,7 @@ class _DiskPortWidgetState extends State<_DiskPortWidget> {
         children: [
           Container(
             alignment: Alignment.topLeft,
+            padding: const EdgeInsets.only(right: 5),
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(color: Setting.bottomBorderColor),
@@ -289,7 +289,21 @@ class _DiskPortWidgetState extends State<_DiskPortWidget> {
                   height: 30,
                   child: Text(
                     '盘口信息[${_select?.username ?? ''}]',
-                    style: TextStyle(fontSize: 13),
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    if (type == DiskPortType.TypeOne) {
+                      type = DiskPortType.TypeTwo;
+                    } else {
+                      type = DiskPortType.TypeOne;
+                    }
+                    setState(() {});
+                  },
+                  child: const Icon(
+                    Icons.sync_alt,
+                    size: 15,
                   ),
                 ),
               ],
@@ -298,7 +312,7 @@ class _DiskPortWidgetState extends State<_DiskPortWidget> {
           Expanded(
             child: RepaintBoundary(
               child: DiskPortDetailPage(
-                type: DiskPortType.TypeOne,
+                type: type,
               ),
             ),
           ),
@@ -307,4 +321,3 @@ class _DiskPortWidgetState extends State<_DiskPortWidget> {
     );
   }
 }
-

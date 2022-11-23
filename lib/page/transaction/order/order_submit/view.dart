@@ -263,6 +263,7 @@ class _OrderSubmitPageState extends State<OrderSubmitPage> {
                           ),
                           Container(
                             child: TextInputNumberUpDown(
+                              controller: state.price,
                               focusNode: FocusNode(),
                               key: const Key('Price'),
                               height: 30,

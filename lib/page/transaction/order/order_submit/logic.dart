@@ -48,6 +48,7 @@ class OrderSubmitLogic extends GetxController {
 
   void _eventBusListen() {
     EventBusHelper.listen<EventSelect>((event) {
+      /// 合约组传数据
       if (event.value != null) {
         if (Global.lock == true) {
           ToastUtils.showToast(msg: '合约已锁定，需要修改请点击图标解锁');
@@ -55,6 +56,9 @@ class OrderSubmitLogic extends GetxController {
           _init(enKey: event.value.password);
           state.controller.text = event.value.username;
         }
+        /// 盘口信息传数据过来了
+      } else if (event.price != null) {
+        state.price.text = event.price; /// todo 暂定price还需续改
       }
     });
   }

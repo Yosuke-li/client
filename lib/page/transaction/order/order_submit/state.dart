@@ -9,7 +9,7 @@ class OrderSubmitState {
 
   late TextEditingController controller;
   late TextEditingController hands;
-  late RxDouble price;
+  late TextEditingController price;
   late RxString side;
   late RxString tif;
   late RxString orderType;
@@ -29,7 +29,7 @@ class OrderSubmitState {
     // create = OrderSubmit();
     controller = TextEditingController();
     hands = TextEditingController();
-    price = (0.0).obs;
+    price = TextEditingController();
     sides = <String>[].obs;
     tifs = <String>[].obs;
     orderTypes = <String>[].obs;

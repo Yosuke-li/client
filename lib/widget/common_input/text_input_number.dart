@@ -14,6 +14,7 @@ class TextInputNumberUpDown extends StatefulWidget {
   final FormFieldSetter<String> onSave;
   final double? height;
   final Decoration? decoration;
+  final TextEditingController? controller;
   final RulesFunc rulesFunc;
   final FocusNode focusNode;
 
@@ -22,6 +23,7 @@ class TextInputNumberUpDown extends StatefulWidget {
     required this.onSave,
     required this.rulesFunc,
     required this.focusNode,
+    this.controller,
     this.height,
     this.decoration,
   }) : super(key: key);
@@ -31,11 +33,12 @@ class TextInputNumberUpDown extends StatefulWidget {
 }
 
 class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
-  TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
 
   @override
   void initState() {
     super.initState();
+    controller = widget.controller ?? TextEditingController();
   }
 
   @override
@@ -46,7 +49,8 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
       onKey: (key) {
         if (key.character != null && key.logicalKey.keyLabel == 'Arrow Up') {
           widget.rulesFunc.upRule.call(controller);
-        } else if (key.character != null && key.logicalKey.keyLabel == 'Arrow Down') {
+        } else
+        if (key.character != null && key.logicalKey.keyLabel == 'Arrow Down') {
           widget.rulesFunc.downRule.call(controller);
         }
       },
@@ -55,11 +59,11 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
         alignment: Alignment.centerLeft,
         decoration: widget.decoration ??
             BoxDecoration(
-              border: Border.all(
-                color: const Color(0xE6797979),
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(3)
+                border: Border.all(
+                  color: const Color(0xE6797979),
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(3)
             ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +73,7 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
                 height: widget.height ?? 30,
                 child: TextFormField(
                   controller: controller,
-                  style: const TextStyle(fontSize: 13),
+                  style: const TextStyle(fontSize: 16),
                   decoration: const InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -84,7 +88,7 @@ class _TextInputNumberUpDownState extends State<TextInputNumberUpDown> {
                         ),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 6)),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 6)),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                   ],
