@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transaction_client/global/setting.dart';
+import 'package:transaction_client/page/transaction/common/bottom_widget.dart';
 import 'package:transaction_client/utils/log_utils.dart';
 
 import 'editor.dart';
@@ -57,6 +58,7 @@ class _HomeChildPageState extends State<_HomeChildPage> {
                       controller: editorController,
                     ),
                   ),
+                  const BottomWidgetPage(),
                 ],
               )
             : Row(
@@ -72,16 +74,7 @@ class _HomeChildPageState extends State<_HomeChildPage> {
                       controller: editorController,
                     ),
                   ),
-                  //todo 之后的日志
-                  // Expanded(
-                  //   child: Column(
-                  //     children: [
-                  //       SocketMsgWidget(
-                  //         key: Key(editorController.hashCode.toString()),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  const BottomWidgetPage(),
                 ],
               ),
       ),

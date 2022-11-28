@@ -1,3 +1,5 @@
+import 'package:transaction_client/model/entrust.dart';
+
 class Account {
   String? username;
   String? password;
@@ -5,6 +7,8 @@ class Account {
   bool? isSave;
   String? accessToken;
   String? refreshToken;
+  //todo
+  List<Entrust>? entrusts;
 
   Account({
     String? username,
@@ -12,13 +16,14 @@ class Account {
     String? refreshToken,
     bool? isRead,
     bool? isSave,
-    String? accessToken}){
+    String? accessToken, List<Entrust>? entrusts}){
     username = username;
     password = password;
     isRead = isRead;
     isSave = isSave;
     accessToken = accessToken;
     refreshToken = refreshToken;
+    entrusts=entrusts;
   }
 
   Account.fromJson(dynamic json) {

@@ -170,7 +170,7 @@ class _PositionPageState extends State<PositionPage> with AutomaticKeepAliveClie
               ),
             ),
             Expanded(
-              child: CommonForm<Entrust>(
+              child: CommonForm<Entrust, dynamic>(
                 canDrag: true,
                 titleColor: Setting.tableBarColor,
                 height: 200,

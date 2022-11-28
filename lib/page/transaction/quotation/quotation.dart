@@ -92,8 +92,9 @@ class _QuotationState extends State<QuotationPage> {
           children: [
             //拖拽
             const _TopGroups(),
-            CommonForm<Account>(
+            CommonForm<Account, dynamic>(
               canDrag: canDrag,
+              showSelectItem: true,
               onTapFunc: (Account value) {
                 _eventBus(value);
               },

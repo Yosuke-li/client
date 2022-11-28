@@ -225,7 +225,7 @@ class _EntrustState extends State<EntrustPage> {
               ),
             ),
             Expanded(
-              child: CommonForm<Entrust>(
+              child: CommonForm<Entrust, dynamic>(
                 canDrag: true,
                 titleColor: Setting.tableBarColor,
                 height: 200,

@@ -24,7 +24,7 @@ class _DealOrderPageState extends State<DealOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: CommonForm<Entrust>(
+      child: CommonForm<Entrust, dynamic>(
         canDrag: true,
         titleColor: Setting.tableBarColor,
         height: 200,

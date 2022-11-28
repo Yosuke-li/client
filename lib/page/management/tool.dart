@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/page/auto_strategy/auto_main.dart';
-import 'package:transaction_client/page/instructions/main/instruct_main.dart';
+import 'package:transaction_client/page/instructions/instruct_home.dart';
+import 'package:transaction_client/page/instructions/instruct_main.dart';
 import 'package:transaction_client/page/transaction/common/home.dart';
 import 'package:transaction_client/widget/management/common/view_key.dart';
 import 'package:transaction_client/widget/management/widget/custom_expansion_tile.dart';
@@ -45,7 +46,7 @@ class _ToolState extends State<Tool> {
     widget.controller.open(
       key: ConstViewKey.instructInfo,
       tab: '指令下单',
-      contentIfAbsent: (_) => const InstructMainPage(),
+      contentIfAbsent: (_) => const InstructHome(),
     );
     setState(() {});
   }

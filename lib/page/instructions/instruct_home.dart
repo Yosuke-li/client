@@ -3,20 +3,15 @@ import 'package:multi_split_view/multi_split_view.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/page/instructions/instruct_main.dart';
 import 'package:transaction_client/page/transaction/common/home_main.dart';
-import 'package:transaction_client/page/transaction/quotation/quotation.dart';
-import 'package:transaction_client/utils/log_utils.dart';
 
-
-class HomeIndexPage extends StatefulWidget {
-  const HomeIndexPage({
-    Key? key,
-  }) : super(key: key);
+class InstructHome extends StatefulWidget {
+  const InstructHome({Key? key}) : super(key: key);
 
   @override
-  State<HomeIndexPage> createState() => _HomeIndexPageState();
+  State<InstructHome> createState() => _InstructHomeState();
 }
 
-class _HomeIndexPageState extends State<HomeIndexPage> {
+class _InstructHomeState extends State<InstructHome> {
   late MultiSplitView multiSplitView;
   MultiSplitViewTheme? theme;
   late MultiSplitViewController _controller;
@@ -33,9 +28,9 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
       multiSplitView = MultiSplitView(
         axis: Axis.vertical,
         controller: _controller,
-        children: const [
-          QuotationPage(),
-          HomeBottomMain(key: Key('quotation'),)
+        children: [
+          const InstructMainPage(),
+          Container(),
         ],
         onWeightChange: () {},
       );
