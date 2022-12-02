@@ -73,7 +73,7 @@ class _ToolState extends State<Tool> {
   Widget build(BuildContext context) {
     return widget.isVertical
         ? Container(
-            height: 50,
+            height: Setting.tabBarHeight,
             decoration: BoxDecoration(
                 color: Setting.backGroundColor,
                 border:
@@ -132,7 +132,7 @@ class _ToolState extends State<Tool> {
             ),
           )
         : Container(
-            width: 60,
+            width: Setting.tabBarWidth,
             padding: const EdgeInsets.only(bottom: 10),
             color: const Color(0xff333333),
             child: Column(

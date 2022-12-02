@@ -6,7 +6,6 @@ import 'package:transaction_client/page/transaction/common/home_main.dart';
 import 'package:transaction_client/page/transaction/quotation/quotation.dart';
 import 'package:transaction_client/utils/log_utils.dart';
 
-
 class HomeIndexPage extends StatefulWidget {
   const HomeIndexPage({
     Key? key,
@@ -29,15 +28,28 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
         Area(weight: 0.35, minimalWeight: 0.2),
         Area(weight: 0.65, minimalWeight: 0.57)
       ]);
+      init();
+      setState(() {});
+    });
+  }
 
+  void init() {
+    try {
       multiSplitView = MultiSplitView(
         axis: Axis.vertical,
         controller: _controller,
-        children: const [
-          QuotationPage(),
-          HomeBottomMain(key: Key('quotation'),)
+        children: [
+          QuotationPage(
+            height: (_controller.getArea(0).weight! *
+                MediaQuery.of(context).size.height),
+          ),
+          const HomeBottomMain(
+            key: Key('quotation'),
+          )
         ],
-        onWeightChange: () {},
+        onWeightChange: () {
+          init();
+        },
       );
 
       theme = MultiSplitViewTheme(
@@ -49,7 +61,9 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
         child: multiSplitView,
       );
       setState(() {});
-    });
+    } catch (err) {
+      rethrow;
+    }
   }
 
   @override

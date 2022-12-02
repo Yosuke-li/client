@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Setting {
+  static double tabBarHeight = 50;
+  static double tabBarWidth = 60;
+
+  static double tabBarSecHeight = 28;
+
   static Future<void> loginSize() async {
     await windowManager.setTitleBarStyle(TitleBarStyle.hidden, windowButtonVisibility: false);
     await windowManager.setSize(const Size(600, 350));

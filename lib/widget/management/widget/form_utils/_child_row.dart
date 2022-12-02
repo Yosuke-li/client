@@ -1,4 +1,4 @@
-part of 'common_form.dart';
+part of '../common_form.dart';
 
 class _ChildWidget<T> extends StatefulWidget {
   List<FormChildColumn<T>> children;
@@ -14,6 +14,7 @@ class _ChildWidget<T> extends StatefulWidget {
 class _ChildWidgetState<T> extends State<_ChildWidget<T>> {
   List<Widget> columns = [];
   List<Widget> titles = [];
+  int onSelectHash = -1;
 
   @override
   void initState() {
@@ -66,14 +67,25 @@ class _ChildWidgetState<T> extends State<_ChildWidget<T>> {
     List<Widget> row = [];
     row.add(_topCell());
     row.addAll(widget.children
-        .map((e) => _warpWidget(child: e.builder(context, value)))
+        .map((e) => _warpWidget(
+              child: e.builder(context, value),
+              color:
+                  value.hashCode == onSelectHash ? Colors.blue.shade50 : null,
+            ))
         .toList());
     return GestureDetector(
       key: Key(value.hashCode.toString()),
       child: Row(
         children: row,
       ),
-      onTap: () {},
+      onTap: () {
+        if (onSelectHash != value.hashCode) {
+          onSelectHash = value.hashCode ?? -1;
+        } else {
+          onSelectHash = -1;
+        }
+        setState(() {});
+      },
     );
   }
 
@@ -84,7 +96,7 @@ class _ChildWidgetState<T> extends State<_ChildWidget<T>> {
           color: color),
       height: 26,
       width: width ??
-          (MediaQuery.of(context).size.width - 50) / widget.children.length,
+          (MediaQuery.of(context).size.width - 50) / 7,
       padding: const EdgeInsets.all(4),
       alignment: Alignment.center,
       child: RepaintBoundary(

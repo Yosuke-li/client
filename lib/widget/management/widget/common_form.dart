@@ -10,81 +10,10 @@ import 'package:transaction_client/utils/lock.dart' as self_lock;
 import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/widget/management/common/function_util.dart';
 
-part '_child_row.dart';
-
-FormColumn<T> buildTextFormColumn<T>(
-    {required Widget title, required String text(T value)}) {
-  return FormColumn<T>(
-      title: title, builder: (_, T value) => Text(text(value)));
-}
-
-FormColumn<T> buildButtonFormColumn<T>(
-    {required Widget title, required String text(T value), InFunc<T>? onTap}) {
-  return FormColumn<T>(
-    title: title,
-    builder: (_, T value) => ElevatedButton(
-      onPressed: onTap == null
-          ? null
-          : () {
-              onTap(value);
-            },
-      child: Text(text(value)),
-    ),
-  );
-}
-
-FormColumn<T> buildIconButtonFormColumn<T>(
-    {required Widget title, IconData? icon, InFunc<T>? onTap}) {
-  return FormColumn<T>(
-      title: title,
-      builder: (_, T value) => IconButton(
-            icon: Icon(icon),
-            onPressed: onTap == null
-                ? null
-                : () {
-                    onTap(value);
-                  },
-          ));
-}
-
-/// self methods
-/// [ColorFunc] 用于选中状态下的column，
-/// [WidgetBuilderFunc] builder新子类
-/// [TapCallBack] 点击的回调
-/// [DragCallBack] 拖拽的回调
-typedef ColorFunc<T> = MaterialAccentColor? Function(T value);
-typedef WidgetBuilderFunc<T> = Widget Function(BuildContext context, T value);
-typedef ListWidgetBuilder<T> = List<Widget> Function(
-    BuildContext context, T value);
-typedef TapCallBack<T> = void Function(T value);
-typedef DragCallBack<T> = void Function(T value, int index);
-
-class FormColumn<T> {
-  final Widget title;
-  final double? width;
-  final ColorFunc<T>? color;
-  final Widget? extraBuilder;
-  final WidgetBuilderFunc<T> builder;
-
-  FormColumn(
-      {required this.title,
-      required this.builder,
-      this.width,
-      this.color,
-      this.extraBuilder});
-}
-
-class FormChildColumn<T> {
-  final Widget title;
-  final double? width;
-  final WidgetBuilderFunc<T> builder;
-
-  FormChildColumn({
-    required this.title,
-    required this.builder,
-    this.width,
-  });
-}
+part 'form_utils/_child_row.dart';
+part 'form_utils/form_widget.dart';
+part 'form_utils/_row_widget.dart';
+part 'fixed_column_form.dart';
 
 /// 点击的回调方法[onTapFunc]
 ///
@@ -99,6 +28,10 @@ class FormChildColumn<T> {
 ///        Log.info(index);
 ///  }
 ///
+///
+/// 额外功能：
+/// 1. 固定前几列，只滑动后面的区域
+/// 2. 分组表格 <T, D>，两泛型实现
 
 class CommonForm<T, D> extends StatefulWidget {
   final List<FormColumn<T>> columns;
@@ -107,6 +40,7 @@ class CommonForm<T, D> extends StatefulWidget {
   final List<D> Function(T value)? childValues;
   final bool canDrag;
   final bool showExtra;
+  final int fixedColumn; //固定前几列
   final TapCallBack<T>? onTapFunc; //点击回调
   final DragCallBack<T>? onDragFunc; //拖拽后的回调
   final double? height;
@@ -126,6 +60,7 @@ class CommonForm<T, D> extends StatefulWidget {
       this.canDrag = false,
       this.showExtra = false,
       this.onDragFunc,
+      this.fixedColumn = 0,
       this.childWidget,
       this.onTapFunc,
       this.titleColor,
@@ -190,8 +125,9 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
               .map((e) => LongPressDraggable(
                   data: e,
                   delay: const Duration(milliseconds: 300),
-                  feedback: warpWidget(
-                      child: e.title, width: e.width, color: widget.titleColor),
+                  feedback: WrapWidget(
+                      width: e.width, color: widget.titleColor,
+                      child: e.title),
                   child: DragTarget<FormColumn<T>>(
                     onAccept: (data) {
                       final index = columns.indexOf(e);
@@ -202,7 +138,7 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                       });
                     },
                     builder: (context, data, rejects) {
-                      return warpWidget(
+                      return WrapWidget(
                           child: e.title,
                           width: e.width,
                           color: widget.titleColor);
@@ -211,15 +147,16 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
               .toList(growable: false)
           : formList
               .map(
-                (e) => warpWidget(
-                    child: e.title, width: e.width, color: widget.titleColor),
+                (e) => WrapWidget(
+                    width: e.width, color: widget.titleColor,
+                    child: e.title),
               )
               .toList(growable: false),
     );
   }
 
   ///可拖拽
-  Widget buildDragTitleRow(int index) {
+  Widget buildDragRow(int index) {
     return LongPressDraggable(
       data: index,
       delay: const Duration(milliseconds: 200),
@@ -312,7 +249,7 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                   children: [
                     Row(
                       children: widget.columns
-                          .map((e) => warpWidget(
+                          .map((e) => WrapWidget(
                               child: e.builder(context, value),
                               color: widget.showSelectItem == true &&
                                       value.hashCode == onSelectHash
@@ -331,30 +268,15 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                 )
               : Row(
                   children: widget.columns
-                      .map((e) => warpWidget(
-                          child: e.builder(context, value),
+                      .map((e) => WrapWidget(
                           color: value.hashCode == onSelectHash
                               ? Colors.blue.shade50
                               : e.color?.call(value),
-                          width: e.width))
+                          width: e.width,
+                          child: e.builder(context, value)))
                       .toList(growable: false),
                 ),
         ),
-      ),
-    );
-  }
-
-  Widget warpWidget({required Widget child, Color? color, double? width}) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(width: 0.1, color: const Color(0xE6797979)),
-          color: color),
-      height: 26,
-      width: width ?? 125,
-      padding: const EdgeInsets.all(4),
-      alignment: Alignment.center,
-      child: RepaintBoundary(
-        child: child,
       ),
     );
   }
@@ -364,14 +286,14 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
     final List<Widget> children = <Widget>[];
     if (widget.canDrag == true) {
       for (int x = 0; x < widget.values.length; x++) {
-        children.add(buildDragTitleRow(x));
+        children.add(buildDragRow(x));
       }
     } else {
       children.addAll(
           widget.values.map((e) => buildRow(e, color: widget.formColor)));
     }
     if (widget.showExtra == true) {
-      children.add(_extraRow(color: widget.formColor));
+      children.add(ExtraRow<T>(color: widget.formColor, columns: widget.columns,));
     }
 
     return StreamBuilder<List<FormColumn<T>>>(
@@ -431,18 +353,6 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                 ),
               );
       },
-    );
-  }
-
-  Widget _extraRow({Color? color}) {
-    return Container(
-      decoration: BoxDecoration(color: color),
-      child: Row(
-        children: widget.columns
-            .map((e) => warpWidget(
-                child: e.extraBuilder ?? Container(), width: e.width))
-            .toList(growable: false),
-      ),
     );
   }
 }

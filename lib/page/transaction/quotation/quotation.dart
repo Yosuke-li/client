@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +20,7 @@ class QuotationPage extends StatefulWidget {
   const QuotationPage({Key? key, this.height}) : super(key: key);
 
   @override
-  _QuotationState createState() => _QuotationState();
+  State<QuotationPage> createState() => _QuotationState();
 }
 
 class _QuotationState extends State<QuotationPage> {
@@ -30,16 +32,36 @@ class _QuotationState extends State<QuotationPage> {
       ..username = 'ZH202203'
       ..password = 'CZCE',
     Account()
+      ..username = 'ZH202205'
+      ..password = 'INE',
+    Account()
       ..username = 'ZH202206'
+      ..password = 'INE',
+    Account()
+      ..username = 'ZH202207'
+      ..password = 'INE',
+    Account()
+      ..username = 'ZH202207'
+      ..password = 'INE',
+    Account()
+      ..username = 'ZH202207'
+      ..password = 'INE',
+    Account()
+      ..username = 'ZH202207'
       ..password = 'INE',
   ];
 
   late RightMenuFunc _rightMenuFunc;
   bool canDrag = true;
+  double? height;
+
+  /// 实现控制表格height
+  final StreamController<double> controller = StreamController<double>();
 
   @override
   void initState() {
     _init(); // late要在初始化之前
+    setHeight();
     super.initState();
   }
 
@@ -47,6 +69,16 @@ class _QuotationState extends State<QuotationPage> {
   void didUpdateWidget(covariant QuotationPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.height != oldWidget.height) {
+      Log.info(widget.height ?? 'null');
+      setHeight();
+    }
+  }
+
+  /// 计算高度
+  void setHeight() {
+    if (widget.height != null) {
+      height = widget.height! - Setting.tabBarHeight - Setting.tabBarSecHeight;
+      controller.sink.add(height!);
       setState(() {});
     }
   }
@@ -89,362 +121,372 @@ class _QuotationState extends State<QuotationPage> {
       child: Container(
         alignment: Alignment.centerLeft,
         child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             //拖拽
             const _TopGroups(),
-            CommonForm<Account, dynamic>(
-              canDrag: canDrag,
-              showSelectItem: true,
-              onTapFunc: (Account value) {
-                _eventBus(value);
-              },
-              showExtra: true,
-              rightMenuFunc: _rightMenuFunc,
-              titleColor: Setting.tableBarColor,
-              columns: [
-                FormColumn<Account>(
-                  title: const Text(
-                    '编号',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  width: 50,
-                  extraBuilder: GestureDetector(
-                    onTap: () {
-                      QuoSetting.Modal(context);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.add_box_outlined,
-                        size: 18,
-                        color: Color(0x50000000),
-                      ),
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${users.indexOf(v)}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Setting.tableBlue,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '品种',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      v.username ?? '',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Setting.tableBlue,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '合约编码',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.username ?? ''}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Setting.tableBlue,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '现价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Setting.tableRed,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '涨幅',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Setting.tableRed,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '涨跌',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Setting.tableRed,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '买价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '卖价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '最高价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '最低价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '振幅',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '开盘价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '昨日收盘价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '昨日结算价',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '交易所',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                FormColumn<Account>(
-                  title: const Text(
-                    '行情更新时间',
-                    style: TextStyle(
-                      fontSize: 13,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  builder: (_, v) => Container(
-                    child: Text(
-                      '${v.password ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              values: users,
-            ),
+            RepaintBoundary(
+              child: StreamBuilder<double>(
+                  stream: controller.stream,
+                  initialData: height,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    return FixedColumnForm<Account>(
+                      canDrag: true,
+                      showSelectItem: true,
+                      onTapFunc: (Account value) {
+                        _eventBus(value);
+                      },
+                      height: snapshot.data as double,
+                      fixedColumn: 5,
+                      showExtra: true,
+                      rightMenuFunc: _rightMenuFunc,
+                      titleColor: Setting.tableBarColor,
+                      columns: [
+                        FormColumn<Account>(
+                          title: const Text(
+                            '编号',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          width: 50,
+                          extraBuilder: GestureDetector(
+                            onTap: () {
+                              QuoSetting.Modal(context);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: const Icon(
+                                Icons.add_box_outlined,
+                                size: 18,
+                                color: Color(0x50000000),
+                              ),
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${users.indexOf(v)}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Setting.tableBlue,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '品种',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              v.username ?? '',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Setting.tableBlue,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '合约编码',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.username ?? ''}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Setting.tableBlue,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '现价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Setting.tableRed,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '涨幅',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Setting.tableRed,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '涨跌',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.username ?? ''}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Setting.tableRed,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '买价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '卖价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '最高价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '最低价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '振幅',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '开盘价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '昨日收盘价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '昨日结算价',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '交易所',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FormColumn<Account>(
+                          title: const Text(
+                            '行情更新时间',
+                            style: TextStyle(
+                              fontSize: 13,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          builder: (_, v) => Container(
+                            child: Text(
+                              '${v.password ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      values: users,
+                    );
+                  }),
+            )
           ],
         ),
       ),
@@ -489,7 +531,7 @@ class _TopGroupsState extends State<_TopGroups> {
   Widget build(BuildContext context) {
     return Container(
       color: Setting.backGroundColor,
-      height: 28,
+      height: Setting.tabBarSecHeight,
       child: Row(
         children: [
           Row(

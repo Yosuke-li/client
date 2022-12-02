@@ -30,7 +30,9 @@ extension InstructTypeTxt on InstructType {
 }
 
 class InstructMainPage extends StatefulWidget {
-  const InstructMainPage({Key? key}) : super(key: key);
+  final double? height;
+
+  const InstructMainPage({Key? key, this.height}) : super(key: key);
 
   @override
   State<InstructMainPage> createState() => _InstructMainPageState();
