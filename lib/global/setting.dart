@@ -4,6 +4,7 @@ import 'package:window_manager/window_manager.dart';
 class Setting {
   static double tabBarHeight = 50;
   static double tabBarWidth = 60;
+  static double tableBottomHeight = 35;
 
   static double tabBarSecHeight = 28;
 

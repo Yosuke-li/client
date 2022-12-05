@@ -139,9 +139,9 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                     },
                     builder: (context, data, rejects) {
                       return WrapWidget(
-                          child: e.title,
                           width: e.width,
-                          color: widget.titleColor);
+                          color: widget.titleColor,
+                          child: e.title);
                     },
                   )))
               .toList(growable: false)
@@ -250,12 +250,12 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                     Row(
                       children: widget.columns
                           .map((e) => WrapWidget(
-                              child: e.builder(context, value),
                               color: widget.showSelectItem == true &&
                                       value.hashCode == onSelectHash
                                   ? Colors.blue.shade50
                                   : e.color?.call(value),
-                              width: e.width))
+                              width: e.width,
+                              child: e.builder(context, value)))
                           .toList(growable: false),
                     ),
                     if (hashcodes.contains(value.hashCode))

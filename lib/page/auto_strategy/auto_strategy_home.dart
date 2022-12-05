@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 import 'package:transaction_client/global/setting.dart';
-import 'package:transaction_client/page/instructions/tab_views/instruct_main.dart';
-import 'package:transaction_client/page/transaction/common/home_main.dart';
 
-import 'instruct_sec_part.dart';
+import 'tab_views/auto_main.dart';
 
-class InstructHome extends StatefulWidget {
-  const InstructHome({Key? key}) : super(key: key);
+class AutoStrategyHome extends StatefulWidget {
+  const AutoStrategyHome({Key? key}) : super(key: key);
 
   @override
-  State<InstructHome> createState() => _InstructHomeState();
+  State<AutoStrategyHome> createState() => _AutoStrategyHomeState();
 }
 
-class _InstructHomeState extends State<InstructHome> {
+class _AutoStrategyHomeState extends State<AutoStrategyHome> {
   late MultiSplitView multiSplitView;
   MultiSplitViewTheme? theme;
   late MultiSplitViewController _controller;
@@ -36,9 +34,9 @@ class _InstructHomeState extends State<InstructHome> {
       axis: Axis.vertical,
       controller: _controller,
       children: [
-        InstructMainPage(height: _controller.getArea(0).weight! *
+        AutoStrategyMain(height: _controller.getArea(0).weight! *
             MediaQuery.of(context).size.height,),
-        const InstructSecPartWidget(),
+        Container(),
       ],
       onWeightChange: () {
         init();

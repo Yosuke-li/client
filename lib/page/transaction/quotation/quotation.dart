@@ -77,7 +77,7 @@ class _QuotationState extends State<QuotationPage> {
   /// 计算高度
   void setHeight() {
     if (widget.height != null) {
-      height = widget.height! - Setting.tabBarHeight - Setting.tabBarSecHeight;
+      height = widget.height! - Setting.tabBarHeight - Setting.tabBarSecHeight - 10;
       controller.sink.add(height!);
       setState(() {});
     }
@@ -486,7 +486,7 @@ class _QuotationState extends State<QuotationPage> {
                       values: users,
                     );
                   }),
-            )
+            ),
           ],
         ),
       ),

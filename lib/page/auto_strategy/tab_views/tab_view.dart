@@ -1,7 +1,7 @@
-part of 'instruct_main.dart';
+part of 'auto_main.dart';
 
 class _TypeToTablePage extends StatefulWidget {
-  final InstructType type;
+  final AutoStrategyType type;
   final double height;
 
   const _TypeToTablePage({Key? key, required this.type, required this.height})
@@ -13,127 +13,7 @@ class _TypeToTablePage extends StatefulWidget {
 
 class _TypeToTablePageState extends State<_TypeToTablePage>
     with AutomaticKeepAliveClientMixin {
-  List<Account> users = [
-    Account()
-      ..username = 'CU202203'
-      ..password = 'DCE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 1
-          ..price = '2')
-      ],
-    Account()
-      ..username = 'ZH202203'
-      ..password = 'CZCE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 3
-          ..price = '2'),
-        (Entrust()
-          ..id = 4
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-    Account()
-      ..username = 'ZH202206'
-      ..password = 'INE'
-      ..entrusts = [
-        (Entrust()
-          ..id = 5
-          ..price = '2'),
-        (Entrust()
-          ..id = 6
-          ..price = '2'),
-      ],
-
-  ];
+  List<Account> users = [];
   double? height;
 
   /// 实现控制表格height
@@ -177,7 +57,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
           childWidget: [
             FormChildColumn<Entrust>(
               title: const Text(
-                '指令合约',
+                '合约',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -196,7 +76,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormChildColumn<Entrust>(
               title: const Text(
-                '时间',
+                '现价',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -215,7 +95,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormChildColumn<Entrust>(
               title: const Text(
-                '方向',
+                '涨幅',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -234,7 +114,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormChildColumn<Entrust>(
               title: const Text(
-                '价格',
+                '涨跌',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -253,7 +133,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormChildColumn<Entrust>(
               title: const Text(
-                '手数',
+                '买价',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -272,7 +152,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormChildColumn<Entrust>(
               title: const Text(
-                '已完成手数',
+                '卖价',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -291,7 +171,26 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormChildColumn<Entrust>(
               title: const Text(
-                '状态',
+                '开盘价',
+                style: TextStyle(
+                  fontSize: 13,
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              builder: (_, v) => Text(
+                '${v.price}',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Setting.tableBlue,
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
+            FormChildColumn<Entrust>(
+              title: const Text(
+                '昨日结算价',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -313,7 +212,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
           columns: [
             FormColumn<Account>(
               title: const Text(
-                '品种',
+                '策略名称',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -332,7 +231,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormColumn<Account>(
               title: const Text(
-                '合约',
+                '策略类型',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -353,7 +252,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormColumn<Account>(
               title: const Text(
-                '现价',
+                '执行条件',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -374,7 +273,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormColumn<Account>(
               title: const Text(
-                '涨跌幅',
+                '条件价格',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -395,7 +294,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
             ),
             FormColumn<Account>(
               title: const Text(
-                '涨跌',
+                '策略状态',
                 style: TextStyle(
                   fontSize: 13,
                   decoration: TextDecoration.none,
@@ -408,126 +307,6 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
                   style: TextStyle(
                     fontSize: 13,
                     color: Setting.tableRed,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            FormColumn<Account>(
-              title: const Text(
-                '开盘价',
-                style: TextStyle(
-                  fontSize: 13,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              builder: (_, v) => Container(
-                child: Text(
-                  '${v.password ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            FormColumn<Account>(
-              title: const Text(
-                '昨日结算价',
-                style: TextStyle(
-                  fontSize: 13,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              builder: (_, v) => Container(
-                child: Text(
-                  '${v.password ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            FormColumn<Account>(
-              title: const Text(
-                '总指令手数',
-                style: TextStyle(
-                  fontSize: 13,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              builder: (_, v) => Container(
-                child: Text(
-                  '${v.password ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            FormColumn<Account>(
-              title: const Text(
-                '指令净手数',
-                style: TextStyle(
-                  fontSize: 13,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              builder: (_, v) => Container(
-                child: Text(
-                  '${v.password ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            FormColumn<Account>(
-              title: const Text(
-                '进行中手数',
-                style: TextStyle(
-                  fontSize: 13,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              builder: (_, v) => Container(
-                child: Text(
-                  '${v.password ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            FormColumn<Account>(
-              title: const Text(
-                '完成手数',
-                style: TextStyle(
-                  fontSize: 13,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              builder: (_, v) => Container(
-                child: Text(
-                  '${v.password ?? ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
                     decoration: TextDecoration.none,
                     fontWeight: FontWeight.normal,
                   ),

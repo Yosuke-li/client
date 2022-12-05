@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/model/account.dart';
@@ -5,7 +7,7 @@ import 'package:transaction_client/model/entrust.dart';
 import 'package:transaction_client/utils/screen.dart';
 import 'package:transaction_client/widget/management/widget/common_form.dart';
 
-part 'tab_views/tab_view.dart';
+part 'tab_view.dart';
 
 enum InstructType {
   all,
@@ -30,9 +32,9 @@ extension InstructTypeTxt on InstructType {
 }
 
 class InstructMainPage extends StatefulWidget {
-  final double? height;
+  final double height;
 
-  const InstructMainPage({Key? key, this.height}) : super(key: key);
+  const InstructMainPage({Key? key, required this.height}) : super(key: key);
 
   @override
   State<InstructMainPage> createState() => _InstructMainPageState();
@@ -40,6 +42,30 @@ class InstructMainPage extends StatefulWidget {
 
 class _InstructMainPageState extends State<InstructMainPage> {
   InstructType type = InstructType.all;
+  late double height;
+
+  @override
+  void initState() {
+    setHeight();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant InstructMainPage oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.height != widget.height) {
+      setHeight();
+    }
+  }
+
+  /// 计算高度
+  void setHeight() {
+    height = widget.height -
+        Setting.tabBarHeight -
+        Setting.tabBarSecHeight - 20;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +90,7 @@ class _InstructMainPageState extends State<InstructMainPage> {
                     bottom: screenUtil.adaptive(3),
                   ),
                   alignment: Alignment.center,
-                  height: 30,
+                  height: Setting.tabBarSecHeight,
                   color: type == e ? Setting.tabSelectColor : null,
                   child: Text(
                     e.enumToString,
@@ -74,30 +100,34 @@ class _InstructMainPageState extends State<InstructMainPage> {
             }).toList(),
           ),
         ),
-        Expanded(child: Stack(
-          children: [
-            Container(
-              constraints: const BoxConstraints(maxHeight: 300),
-              child: RepaintBoundary(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    _TypeToTablePage(
-                      type: type,
+        Expanded(
+          child: Stack(
+            children: [
+              Container(
+                  constraints: const BoxConstraints(maxHeight: 300),
+                  child: RepaintBoundary(
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        _TypeToTablePage(
+                          type: type,
+                          height: height,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            )
-          ],
-        )),
+                  ))
+            ],
+          ),
+        ),
         Container(
+          height: Setting.tableBottomHeight,
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(color: Setting.bottomBorderColor),
             ),
           ),
-          padding: const EdgeInsets.only(top: 5, bottom: 5, right: 15),
+          padding: const EdgeInsets.only(right: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +136,7 @@ class _InstructMainPageState extends State<InstructMainPage> {
                 onPressed: () {},
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Setting.backGroundColor)),
+                        MaterialStateProperty.all(Setting.backGroundColor)),
                 child: Container(
                   margin: const EdgeInsets.only(left: 10, right: 10),
                   child: const Text(
@@ -124,13 +154,15 @@ class _InstructMainPageState extends State<InstructMainPage> {
                 onPressed: () {},
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Setting.backGroundColor)),
+                        MaterialStateProperty.all(Setting.backGroundColor)),
                 child: Container(
                   margin: const EdgeInsets.only(left: 10, right: 10),
-                  child: const Text('虚拟对冲',
+                  child: const Text(
+                    '虚拟对冲',
                     style: TextStyle(
                       color: Color(0xff333333),
-                    ),),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -140,13 +172,15 @@ class _InstructMainPageState extends State<InstructMainPage> {
                 onPressed: () {},
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Setting.backGroundColor)),
+                        MaterialStateProperty.all(Setting.backGroundColor)),
                 child: Container(
                   margin: const EdgeInsets.only(left: 10, right: 10),
-                  child: const Text('完成指令',
+                  child: const Text(
+                    '完成指令',
                     style: TextStyle(
                       color: Color(0xff333333),
-                    ),),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -156,13 +190,15 @@ class _InstructMainPageState extends State<InstructMainPage> {
                 onPressed: () {},
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Setting.backGroundColor)),
+                        MaterialStateProperty.all(Setting.backGroundColor)),
                 child: Container(
                   margin: const EdgeInsets.only(left: 10, right: 10),
-                  child: const Text('配单',
+                  child: const Text(
+                    '配单',
                     style: TextStyle(
                       color: Color(0xff333333),
-                    ),),
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 import 'package:transaction_client/global/setting.dart';
-import 'package:transaction_client/page/instructions/instruct_main.dart';
+import 'package:transaction_client/page/instructions/tab_views/instruct_main.dart';
 import 'package:transaction_client/page/transaction/common/home_main.dart';
 import 'package:transaction_client/page/transaction/quotation/quotation.dart';
 import 'package:transaction_client/utils/log_utils.dart';
@@ -25,8 +25,8 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller = MultiSplitViewController(areas: [
-        Area(weight: 0.35, minimalWeight: 0.2),
-        Area(weight: 0.65, minimalWeight: 0.57)
+        Area(weight: 0.4, minimalWeight: 0.2),
+        Area(weight: 0.6, minimalWeight: 0.57)
       ]);
       init();
       setState(() {});
