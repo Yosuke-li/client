@@ -36,6 +36,7 @@ class _ChildWidgetState<T> extends State<_ChildWidget<T>> {
         .map((e) => _warpWidget(child: e.title, color: Setting.tableBarColor))
         .toList());
     return Container(
+      margin: const EdgeInsets.only(bottom: 5),
       child: Column(
         children: [
           Row(
@@ -55,7 +56,7 @@ class _ChildWidgetState<T> extends State<_ChildWidget<T>> {
           border: Border.all(width: 0.1, color: const Color(0xE6797979)),
           color: Setting.tableBarColor),
       height: 26,
-      width: 125,
+      width: 50,
       padding: const EdgeInsets.all(4),
       alignment: Alignment.center,
       child: Container(),

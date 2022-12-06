@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transaction_client/global/setting.dart';
-import 'package:transaction_client/page/auto_strategy/auto_strategy_home.dart';
+import 'package:transaction_client/page/auto_strategy/strategy_home.dart';
 import 'package:transaction_client/page/instructions/instruct_home.dart';
 import 'package:transaction_client/page/transaction/common/home.dart';
 import 'package:transaction_client/widget/management/common/view_key.dart';

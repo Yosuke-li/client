@@ -11,8 +11,11 @@ import 'package:transaction_client/utils/log_utils.dart';
 import 'package:transaction_client/widget/management/common/function_util.dart';
 
 part 'form_utils/_child_row.dart';
+
 part 'form_utils/form_widget.dart';
+
 part 'form_utils/_row_widget.dart';
+
 part 'fixed_column_form.dart';
 
 /// 点击的回调方法[onTapFunc]
@@ -119,15 +122,13 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
 
   Widget buildTitleRow(List<FormColumn<T>> formList) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: widget.canDrag
           ? formList
               .map((e) => LongPressDraggable(
                   data: e,
                   delay: const Duration(milliseconds: 300),
                   feedback: WrapWidget(
-                      width: e.width, color: widget.titleColor,
-                      child: e.title),
+                      width: e.width, color: widget.titleColor, child: e.title),
                   child: DragTarget<FormColumn<T>>(
                     onAccept: (data) {
                       final index = columns.indexOf(e);
@@ -148,8 +149,7 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
           : formList
               .map(
                 (e) => WrapWidget(
-                    width: e.width, color: widget.titleColor,
-                    child: e.title),
+                    width: e.width, color: widget.titleColor, child: e.title),
               )
               .toList(growable: false),
     );
@@ -246,6 +246,7 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
           },
           child: widget.childWidget != null
               ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: widget.columns
@@ -255,7 +256,31 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                                   ? Colors.blue.shade50
                                   : e.color?.call(value),
                               width: e.width,
-                              child: e.builder(context, value)))
+                              child: widget.columns.indexOf(e) == 0
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        hashcodes.contains(value.hashCode)
+                                            ? const Icon(
+                                                Icons.remove,
+                                                size: 14,
+                                                color: Color(0xe5999999),
+                                              )
+                                            : const Icon(
+                                                Icons.add_box_outlined,
+                                                size: 14,
+                                                color: Color(0xe5999999),
+                                              ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        e.builder(context, value),
+                                      ],
+                                    )
+                                  : e.builder(context, value)))
                           .toList(growable: false),
                     ),
                     if (hashcodes.contains(value.hashCode))
@@ -293,7 +318,10 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
           widget.values.map((e) => buildRow(e, color: widget.formColor)));
     }
     if (widget.showExtra == true) {
-      children.add(ExtraRow<T>(color: widget.formColor, columns: widget.columns,));
+      children.add(ExtraRow<T>(
+        color: widget.formColor,
+        columns: widget.columns,
+      ));
     }
 
     return StreamBuilder<List<FormColumn<T>>>(
@@ -310,6 +338,7 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                     child: SizedBox(
                       height: widget.height,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           buildTitleRow(snapshot.data as List<FormColumn<T>>),
                           Expanded(
@@ -318,6 +347,7 @@ class _CommonFormState<T, D> extends State<CommonForm<T, D>> {
                               child: SingleChildScrollView(
                                 controller: vController,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: children,
                                 ),
                               ),
