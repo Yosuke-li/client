@@ -4,7 +4,7 @@ import 'package:transaction_client/global/global.dart';
 import 'package:transaction_client/global/order_json.dart';
 import 'package:transaction_client/global/setting.dart';
 import 'package:transaction_client/model/home_tab.dart';
-import 'package:transaction_client/page/common/tab_view.dart';
+import 'package:transaction_client/page/common/common_tab_view.dart';
 import 'package:transaction_client/page/instructions/instruct_order/view.dart';
 import 'package:transaction_client/page/instructions/instruct_utils/eventbus.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';

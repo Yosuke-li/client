@@ -41,3 +41,4 @@ class Log {
     LocalLog.setLog('${LogLevel.ERROR.toString()} -- ${DateTime.now().toString()} -- $message');
   }
 }
+

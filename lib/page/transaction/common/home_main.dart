@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:transaction_client/global/global.dart';
 import 'package:transaction_client/global/order_json.dart';
 import 'package:transaction_client/model/home_tab.dart';
-import 'package:transaction_client/page/common/tab_view.dart';
+import 'package:transaction_client/page/common/common_tab_view.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';
 import 'package:transaction_client/page/transaction/common/bottom_widget.dart';
 import 'package:multi_split_view/multi_split_view.dart';

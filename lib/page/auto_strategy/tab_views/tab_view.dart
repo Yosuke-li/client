@@ -13,7 +13,28 @@ class _TypeToTablePage extends StatefulWidget {
 
 class _TypeToTablePageState extends State<_TypeToTablePage>
     with AutomaticKeepAliveClientMixin {
-  List<Account> users = [];
+  List<Account> users = [
+
+    Account()
+      ..username = 'CU202203'
+      ..password = 'DCE'
+      ..entrusts = [
+        (Entrust()
+          ..id = 1
+          ..price = '2')
+      ],
+    Account()
+      ..username = 'ZH202203'
+      ..password = 'CZCE'
+      ..entrusts = [
+        (Entrust()
+          ..id = 3
+          ..price = '2'),
+        (Entrust()
+          ..id = 4
+          ..price = '2'),
+      ],
+  ];
   double? height;
 
   /// 实现控制表格height
@@ -219,6 +240,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
                   fontWeight: FontWeight.normal,
                 ),
               ),
+              width: MediaQuery.of(context).size.width / 5,
               builder: (_, v) => Text(
                 '${users.indexOf(v)}',
                 style: TextStyle(
@@ -238,6 +260,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
                   fontWeight: FontWeight.normal,
                 ),
               ),
+              width: MediaQuery.of(context).size.width / 5,
               builder: (_, v) => Container(
                 child: Text(
                   v.username ?? '',
@@ -259,6 +282,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
                   fontWeight: FontWeight.normal,
                 ),
               ),
+              width: MediaQuery.of(context).size.width / 5,
               builder: (_, v) => Container(
                 child: Text(
                   '${v.username ?? ''}',
@@ -280,6 +304,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
                   fontWeight: FontWeight.normal,
                 ),
               ),
+              width: MediaQuery.of(context).size.width / 5,
               builder: (_, v) => Container(
                 child: Text(
                   '${v.password ?? ''}',
@@ -301,6 +326,7 @@ class _TypeToTablePageState extends State<_TypeToTablePage>
                   fontWeight: FontWeight.normal,
                 ),
               ),
+              width: MediaQuery.of(context).size.width / 5,
               builder: (_, v) => Container(
                 child: Text(
                   '${v.password ?? ''}',

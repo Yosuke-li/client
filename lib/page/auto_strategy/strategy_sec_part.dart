@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 import 'package:transaction_client/global/setting.dart';
-import 'package:transaction_client/page/common/tab_view.dart';
+import 'package:transaction_client/page/auto_strategy/strategy_page/strategy_page.dart';
+import 'package:transaction_client/page/common/common_tab_view.dart';
 import 'package:transaction_client/page/transaction/account/head_widget.dart';
 import 'package:transaction_client/utils/screen.dart';
 
@@ -115,8 +116,8 @@ class _AutoStrategyWidgetState extends State<_AutoStrategyWidget> {
             ],
           ),
         ),
-        Expanded(
-          child: Container(),
+        const Expanded(
+          child: StrategyPage(),
         ),
       ],
     );
