@@ -40,6 +40,7 @@ class FixedColumnForm<T> extends StatefulWidget {
 /// 1 拆分list
 class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
   ScrollController hController = ScrollController();
+  ScrollController barController = ScrollController();
   ScrollController tController = ScrollController();
 
   List<FormColumn<T>> allList = [];
@@ -68,6 +69,9 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
     hController.addListener(() {
       tController.jumpTo(hController.offset);
     });
+    // tController.addListener(() {
+    //   hController.jumpTo(tController.offset);
+    // });
     setState(() {});
   }
 
@@ -119,7 +123,8 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
                       setState(() {
                         allList.remove(data);
                         allList.insert(index, data);
-                        normalList = allList.sublist(widget.fixedColumn, allList.length);
+                        normalList =
+                            allList.sublist(widget.fixedColumn, allList.length);
                         controller.sink.add(normalList);
                       });
                     },
@@ -271,60 +276,60 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
         return RepaintBoundary(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: Stack(
-              children: [
-                Container(
-                  height: widget.height,
-                  margin: const EdgeInsets.only(top: 26),
-                  child: SingleChildScrollView(
-                    child: Row(
+            height: widget.height,
+            child: Row(
+                children: [
+                  SizedBox(
+                    width: fixedWidth,
+                    child: Column(
                       children: [
-                        Column(
-                          children: fixedChild,
-                        ),
+                        buildTitleRow(fixedList),
                         Expanded(
-                          child: Scrollbar(
-                            controller: hController,
+                          child: ScrollConfiguration(
+                            behavior: MyCustomScrollBehavior(),
                             child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              controller: hController,
+                              controller: tController,
+                              physics: const NeverScrollableScrollPhysics(),
                               child: Column(
-                                children: normalChild,
+                                children: fixedChild,
                               ),
                             ),
-                          ),
+                          )
                         ),
                       ],
                     ),
                   ),
-                ),
-                Positioned(
-                  child: Row(
-                    children: [
-                      buildTitleRow(fixedList),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          controller: tController,
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: buildTitleRow(
-                              snapshot.data as List<FormColumn<T>>,
-                              canDrag: widget.canDrag),
+                  Expanded(
+                    child: Scrollbar(
+                      controller: barController,
+                      child: SingleChildScrollView(
+                        controller: barController,
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          children: [
+                            buildTitleRow(normalList, canDrag: widget.canDrag),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                controller: hController,
+                                child: Column(
+                                  children: normalChild,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
         );
       },
     );
   }
 }
 
-//
 // Widget a() {
 //   return RepaintBoundary(
 //     child: widget.height != null

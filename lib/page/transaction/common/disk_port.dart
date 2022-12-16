@@ -89,33 +89,36 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                   children: [
                     Expanded(
                       flex: 3,
-                      child: ListView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children: disk.map((e) {
-                          return InkWell(
-                            onTap: () {
-                              _toSendPrice(e.code);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  right: screenUtil.adaptive(15),
-                                  left: screenUtil.adaptive(15)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('${e.name}'),
-                                  Text(
-                                    '${e.code}',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                  Text('${e.value}'),
-                                ],
+                      child: ScrollConfiguration(
+                        behavior: MyCustomScrollBehavior(),
+                        child: ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: disk.map((e) {
+                            return InkWell(
+                              onTap: () {
+                                _toSendPrice(e.code);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    right: screenUtil.adaptive(15),
+                                    left: screenUtil.adaptive(15)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${e.name}'),
+                                    Text(
+                                      '${e.code}',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    Text('${e.value}'),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                     Container(
@@ -128,7 +131,9 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                     ),
                     Expanded(
                       flex: 3,
-                      child: ListView(
+                      child: ScrollConfiguration(
+                        behavior: MyCustomScrollBehavior(),
+                        child: ListView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: disk.map((e) {
                           return InkWell(
@@ -154,7 +159,7 @@ class _DiskPortDetailState extends State<DiskPortDetailPage> {
                             ),
                           );
                         }).toList(),
-                      ),
+                      ),),
                     ),
                     Container(
                       margin: EdgeInsets.only(
