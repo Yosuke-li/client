@@ -68,7 +68,6 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
   void addListenScroll() {
     hController.addListener(() {
       tController.jumpTo(hController.offset);
-      Log.info(hController.position);
     });
     // tController.addListener(() {
     //   hController.jumpTo(tController.offset);
