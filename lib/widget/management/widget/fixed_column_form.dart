@@ -57,12 +57,13 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
 
   /// 拖拽锁
   final self_lock.Lock _lock = self_lock.Lock();
+  String side = 'right';
 
   @override
   void initState() {
     super.initState();
     init();
-    addListenScroll();
+    // addListenScroll();
   }
 
   void addListenScroll() {
@@ -278,28 +279,47 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
             width: MediaQuery.of(context).size.width,
             height: widget.height,
             child: Row(
-                children: [
-                  SizedBox(
+              children: [
+                Listener(
+                  onPointerHover: (details) {
+                    side = 'left';
+                    setState(() {});
+                  },
+                  child: SizedBox(
                     width: fixedWidth,
                     child: Column(
                       children: [
                         buildTitleRow(fixedList),
                         Expanded(
-                          child: ScrollConfiguration(
-                            behavior: MyCustomScrollBehavior(),
+                            child: ScrollConfiguration(
+                          behavior: MyCustomScrollBehavior(),
+                          child: NotificationListener(
+                            onNotification: (ScrollNotification notification) {
+                              if (side == 'left') {
+                                hController.jumpTo(
+                                  notification.metrics.pixels,
+                                );
+                              }
+                              return true;
+                            },
                             child: SingleChildScrollView(
                               controller: tController,
-                              physics: const NeverScrollableScrollPhysics(),
                               child: Column(
                                 children: fixedChild,
                               ),
                             ),
-                          )
-                        ),
+                          ),
+                        )),
                       ],
                     ),
                   ),
-                  Expanded(
+                ),
+                Expanded(
+                  child: Listener(
+                    onPointerHover: (details) {
+                      side = 'right';
+                      setState(() {});
+                    },
                     child: Scrollbar(
                       controller: barController,
                       child: SingleChildScrollView(
@@ -309,10 +329,21 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
                           children: [
                             buildTitleRow(normalList, canDrag: widget.canDrag),
                             Expanded(
-                              child: SingleChildScrollView(
-                                controller: hController,
-                                child: Column(
-                                  children: normalChild,
+                              child: NotificationListener(
+                                onNotification:
+                                    (ScrollNotification notification) {
+                                  if (side == 'right') {
+                                    tController.jumpTo(
+                                      notification.metrics.pixels,
+                                    );
+                                  }
+                                  return true;
+                                },
+                                child: SingleChildScrollView(
+                                  controller: hController,
+                                  child: Column(
+                                    children: normalChild,
+                                  ),
                                 ),
                               ),
                             ),
@@ -320,10 +351,11 @@ class FixedColumnFormState<T> extends State<FixedColumnForm<T>> {
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
+          ),
         );
       },
     );
